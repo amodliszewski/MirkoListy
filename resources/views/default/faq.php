@@ -26,7 +26,7 @@
             . '<br />Będziesz musiał pokazać przykładowy wpis, w którym używałeś swojej obecnej spamlisty.'
         ),
         array(
-            'title' => 'Mam już uprawnienia do importwania ale moja spamlista liczy kilkaset osób. Czy to nie za dużo?',
+            'title' => 'Mam już uprawnienia do importowania ale moja spamlista liczy kilkaset osób. Czy to nie za dużo?',
             'content' => 'Zdecydowanie nie, chociaż najlepiej będzie importować po 50-100 osób w jednym momencie.'
             . '<br />W trakcie importu wykonywanych jest wiele czasochłonnych czynności co przy kilkuset osobach może doprowadzić do przedwczesnego przerwania operacji.'
         ),
