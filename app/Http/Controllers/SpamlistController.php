@@ -538,6 +538,12 @@ class SpamlistController extends Controller
                 ->first();
 
         if (is_object($pivot)) {
+            if ($pivot->rights === UserSpamlist::RIGHTS_BANNED) {
+                $request->session()->flash('flashError', 'Nie możesz opuścić listy, na której masz bana.');
+
+                return redirect()->back();
+            }
+
             $pivot->delete();
 
             $entity->joined_count--;
