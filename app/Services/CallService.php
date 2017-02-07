@@ -9,7 +9,7 @@ class CallService extends Base
     public function singleCallFromEntry($sourceEntry, $sourceComment, $entryId, $linkId, $type, $perComment) {
         $users = [];
 
-        $firstCommentPrefix = 'Wołam przez [MirkoListy](http://mirkolisty.pvu.pl) ';
+        $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) ';
         if ($type === 1) {
             if ($sourceComment !== null) {
                 $firstCommentPrefix .= "plusujących [ten komentarz](http://wykop.pl/wpis/" . $sourceEntry['entry_id'] . "/#comment-" . $sourceComment['id'] . ")";
@@ -79,7 +79,7 @@ class CallService extends Base
         $users = array_unique($users);
 
         $firstCommentPrefix .= ' (' . count($users) . ")\n\n";
-        $firstCommentPrefix .= "Nie chcesz być wołany/a jako plusujący/a? Włącz blokadę na http://mirkolisty.pvu.pl/call lub odezwij się do [IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)";
+        $firstCommentPrefix .= "Nie chcesz być wołany/a jako plusujący/a? Włącz blokadę na https://mirkolisty.pvu.pl/call lub odezwij się do [IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)";
         $firstCommentPrefix .= "\n\nUważasz, że wołający nadużywa MirkoList? Daj znać [IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)\n\n";
 
         $preparedUsers = [];
@@ -94,7 +94,7 @@ class CallService extends Base
     protected function queueComments($spamlists, $entryId, $linkId, $users, $perComment) {
         $spamlistsNames = array();
         foreach ($spamlists as $spamlist) {
-            $spamlistsNames[] = '[' . str_replace('#', '', $spamlist->name) . '](http://mirkolisty.pvu.pl/list/' . $spamlist->uid . ')';
+            $spamlistsNames[] = '[' . str_replace('#', '', $spamlist->name) . '](https://mirkolisty.pvu.pl/list/' . $spamlist->uid . ')';
         }
 
         $firstCommentPrefix = 'Wołam zainteresowanych (' . count($users) . ') z ';

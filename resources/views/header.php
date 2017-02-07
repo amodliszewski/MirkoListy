@@ -168,7 +168,7 @@
     } else {
 ?>
                         <li>
-                            <a href="<?php echo $app->make('WykoCommon\Services\WykopService')->getLoginUrl(); ?>">Zaloguj</a>
+                            <a href="<?php echo $app->make('WykoCommon\Services\WykopService')->getLoginUrl(true); ?>">Zaloguj</a>
                         </li>
 <?php
     }
