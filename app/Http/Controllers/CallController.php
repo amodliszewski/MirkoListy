@@ -197,6 +197,18 @@ class CallController extends Controller
                 }
             }
 
+            if (Cache::has('call_lock_' . $user->id)) {
+                $latestCallDate = new \DateTime(Cache::get('call_lock_' . $user->id));
+
+                $request->session()->flash('flashError', 'Musisz poczekać <span class="countdownTimer">' . $latestCallDate->format('Y-m-d H:i:s') . '</span> min zanim zawołasz ponownie.');
+
+                return redirect()->back()->withInput();
+            }
+
+            $callDate = new \DateTime('+' . $_ENV['CALLS_DELAY_MINUTES'] . ' minutes');
+
+            Cache::put('call_lock_' . $user->id, $callDate->format('Y-m-d H:i:s'), $_ENV['CALLS_DELAY_MINUTES']);
+
             $log = new Log();
 
             $log->user_id = $user->id;
@@ -306,6 +318,18 @@ class CallController extends Controller
                 }
             }
 
+            if (Cache::has('call_lock_' . $user->id)) {
+                $latestCallDate = new \DateTime(Cache::get('call_lock_' . $user->id));
+
+                $request->session()->flash('flashError', 'Musisz poczekać <span class="countdownTimer">' . $latestCallDate->format('Y-m-d H:i:s') . '</span> min zanim zawołasz ponownie.');
+
+                return redirect()->back()->withInput();
+            }
+
+            $callDate = new \DateTime('+' . $_ENV['CALLS_DELAY_MINUTES'] . ' minutes');
+
+            Cache::put('call_lock_' . $user->id, $callDate->format('Y-m-d H:i:s'), $_ENV['CALLS_DELAY_MINUTES']);
+
             $log = new Log();
 
             $log->user_id = $user->id;
@@ -398,10 +422,6 @@ class CallController extends Controller
 
             $callService->singleCallCustom($entryId, $linkId, $firstCommentPrefix, $users, $perComment);
         }
-
-        $callDate = new \DateTime('+' . $_ENV['CALLS_DELAY_MINUTES'] . ' minutes');
-
-        Cache::put('call_lock_' . $user->id, $callDate->format('Y-m-d H:i:s'), $_ENV['CALLS_DELAY_MINUTES']);
 
         $request->session()->flash('flashSuccess', 'Wołanie dodane do kolejki');
 
