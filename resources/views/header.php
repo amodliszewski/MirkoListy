@@ -146,7 +146,7 @@
                             <a href="<?php echo route('faqUrl'); ?>">FAQ</a>
                         </li>
                         <li>
-                            <a href="http://wykoevent.pl">WykoEvent</a>
+                            <a href="https://wykoevent.pl">WykoEvent</a>
                         </li>
 <?php
     $visibleLinks += 3;
