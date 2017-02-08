@@ -719,11 +719,34 @@ class SpamlistController extends Controller
             return response(view('errors/404'), 404);
         }
 
+        $defaultSortOption = 'joined.desc';
+
+        $sortOptions = [
+            'joined.desc',
+            'joined.asc',
+            'nick.asc'
+        ];
+
+        $sortBy = $request->get('sort', $defaultSortOption);
+
+        if (!in_array($sortBy, $sortOptions)) {
+            $sortBy = $defaultSortOption;
+        }
+
         $queryBuilder = UserSpamlist::select(DB::raw('user_spamlists.*, users.nick, users.id as user_id'))
                 ->join('users', 'users.id', '=', 'user_spamlists.user_id')
                 ->where('spamlist_id', '=', $entity['id'])
-                ->orderBy('user_spamlists.rights', 'desc')
-                ->orderBy('users.nick', 'asc');
+                ->orderBy('user_spamlists.rights', 'desc');
+
+        $sortByArray = explode('.', $sortBy);
+
+        if ($sortByArray[0] === 'joined') {
+            $sortByField = 'user_spamlists.created_at';
+        } else {
+            $sortByField = 'users.nick';
+        }
+
+        $queryBuilder->orderBy($sortByField, $sortByArray[1]);
 
         if ($request->has('query')) {
             $queryBuilder->where('users.nick', 'LIKE', '%' . $request->get('query') . '%');
@@ -751,7 +774,8 @@ class SpamlistController extends Controller
             'paginator' => $paginator,
             'isOwner' => $isOwner,
             'canChangeRights' => $spamlistService->checkRights($entity, $user, UserSpamlist::ACTION_CHANGE_RIGHTS),
-            'query' => $request->get('query', null)
+            'query' => $request->get('query', null),
+            'sortBy' => $sortBy
         ));
     }
 

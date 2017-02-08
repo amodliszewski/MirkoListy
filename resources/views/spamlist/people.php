@@ -5,7 +5,7 @@
         <div class="row">&nbsp;</div>
 
         <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <ol class="breadcrumb">
                     <li>
                         <a href="<?php echo route('getSpamlistUrl', array('uid' => $item['uid'])); ?>"><?php echo $app->make('App\Services\TemplateService')->clearValue($item['name']); ?></a>
@@ -13,14 +13,30 @@
                     <li class="active">użytkownicy</li>
                 </ol>
             </div>
-            <div class="col-lg-4">
-                <form class="form-horizontal" action="<?php echo route('postSpamlistPeopleUrl', ['uid' => $item['uid']]); ?>">
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="query" value="<?php echo $query; ?>">
-                        <span class="input-group-btn">
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <form class="form-horizontal" action="<?php echo route('postSpamlistPeopleUrl', ['uid' => $item['uid']]); ?>" id="searchForm">
+                    <div class="form-group">
+                        <label class="col-sm-1 control-label">Sortuj po: </label>
+                        <div class="col-sm-4">
+                            <select class="form-control" name="sort" id="sortSelect">
+                                <option value="joined.desc">dacie dołączenia (od najnowszych)</option>
+                                <option value="joined.asc"<?php echo $sortBy === 'joined.asc' ? ' selected="selected"' : ''; ?>>dacie dołączenia (od najstarszych)</option>
+                                <option value="nick.asc"<?php echo $sortBy === 'nick.asc' ? ' selected="selected"' : ''; ?>>alfabetycznie</option>
+                            </select>
+                        </div>
+
+                        <label class="col-sm-1 control-label">Nick: </label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" name="query" value="<?php echo $query; ?>">
+                        </div>
+
+                        <div class="col-sm-3">
                             <button class="btn btn-default" type="submit">Szukaj</button>
                             <button class="btn btn-default" type="button" onClick="document.location.href = '<?php echo route('postSpamlistPeopleUrl', ['uid' => $item['uid']]); ?>';">Wyczyść</button>
-                        </span>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -94,5 +110,13 @@
 ?>
                 </div>
             </div>
+
+            <script type="text/javascript">
+                jQuery(document).ready(function() {
+                    jQuery('#sortSelect').on('change', function() {
+                        jQuery('#searchForm').submit();
+                    });
+                });
+            </script>
 <?php
     require dirname(__FILE__) . '/../footer.php';
