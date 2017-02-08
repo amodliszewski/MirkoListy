@@ -276,7 +276,7 @@
     if (is_object($logs) && $logs->count() > 0) {
 ?>
                 <div class="well">
-                    <h4>Ostatnie wydarzenia</h4>
+                    <h4>Ostatnie wydarzenia <small>(<a href="<?php echo route('spamlistLogsUrl', ['uid' => $item['uid']]); ?>">zobacz wszystkie</a>)</small></h4>
 <?php
         foreach ($logs as $log) {
 ?>

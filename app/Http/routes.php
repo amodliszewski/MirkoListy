@@ -205,3 +205,14 @@ Route::post('/rights/changeRights', array(
     'uses' => 'RightsController@changeRights',
     'as' => 'changeProfileRightsUrl'
 ));
+
+Route::get('/logs', array(
+    'uses' => 'LogsController@index',
+    'as' => 'logsUrl'
+));
+
+Route::get('/logs/{uid}', array(
+    'uses' => 'LogsController@index',
+    'as' => 'spamlistLogsUrl'
+))
+    ->where('uid', '[0-9A-Za-z]{16}');

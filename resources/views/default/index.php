@@ -41,7 +41,7 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <h2 class="page-header">Ostatnie wydarzenia</h2>
+                <h2 class="page-header">Ostatnie wydarzenia <small>(<a href="<?php echo route('logsUrl'); ?>">zobacz wszystkie</a>)</small></h2>
             </div>
             <div class="col-md-12">
 <?php

@@ -30,7 +30,7 @@
 
                         <label class="col-sm-1 control-label">Nick: </label>
                         <div class="col-sm-3">
-                            <input type="text" class="form-control" name="query" value="<?php echo $query; ?>">
+                            <input type="text" class="form-control" name="query" value="<?php echo $app->make('App\Services\TemplateService')->clearValue($query); ?>">
                         </div>
 
                         <div class="col-sm-3">
