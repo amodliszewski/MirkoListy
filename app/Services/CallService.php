@@ -50,6 +50,16 @@ class CallService extends Base
             }
         }
 
+        $this->singleCall($entryId, $linkId, $firstCommentPrefix, $users, $perComment);
+    }
+
+    public function singleCallCustom($entryId, $linkId, $firstCommentPrefix, $users, $perComment) {
+        $this->singleCall($entryId, $linkId, $firstCommentPrefix, $users, $perComment);
+    }
+
+    public function singleCall($entryId, $linkId, $firstCommentPrefix, $users, $perComment) {
+        $users = array_unique($users);
+
         $optOutUsers = User::whereIn('nick', $users)->where('call_optout', 1)->get();
 
         if (!empty($optOutUsers)) {
@@ -66,27 +76,19 @@ class CallService extends Base
             return;
         }
 
-        $this->singleCall($entryId, $linkId, $firstCommentPrefix, $users, $perComment);
-    }
-
-    public function singleCallCustom($entryId, $linkId, $firstCommentPrefix, $users, $perComment) {
-        $users = array_unique($users);
-
-        $this->singleCall($entryId, $linkId, $firstCommentPrefix, $users, $perComment);
-    }
-
-    public function singleCall($entryId, $linkId, $firstCommentPrefix, $users, $perComment) {
-        $users = array_unique($users);
-
-        $firstCommentPrefix .= ' (' . count($users) . ")\n\n";
-        $firstCommentPrefix .= "Nie chcesz być wołany/a jako plusujący/a? Włącz blokadę na https://mirkolisty.pvu.pl/call lub odezwij się do [IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)";
-        $firstCommentPrefix .= "\n\nUważasz, że wołający nadużywa MirkoList? Daj znać [IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)\n\n";
-
         $preparedUsers = [];
 
         foreach ($users as $user) {
+            if (strpos($user, '..') !== false) {
+                continue;
+            }
+
             $preparedUsers[] = $_ENV['WYKOP_CALL_PREFIX'] . $user;
         }
+
+        $firstCommentPrefix .= ' (' . count($preparedUsers) . ")\n\n";
+        $firstCommentPrefix .= "Nie chcesz być wołany/a jako plusujący/a? Włącz blokadę na https://mirkolisty.pvu.pl/call lub odezwij się do @[IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)";
+        $firstCommentPrefix .= "\n\nUważasz, że wołający nadużywa MirkoList? Daj znać @[IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)\n\n";
 
         $this->saveQueue($firstCommentPrefix, $preparedUsers, $entryId, $linkId, $perComment);
     }
