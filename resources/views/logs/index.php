@@ -79,6 +79,7 @@
 ?>
                 </div>
             </div>
+        </div>
 
 <?php
     require dirname(__FILE__) . '/../footer.php';

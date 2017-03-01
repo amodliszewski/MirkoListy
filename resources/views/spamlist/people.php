@@ -110,13 +110,14 @@
 ?>
                 </div>
             </div>
+        </div>
 
-            <script type="text/javascript">
-                jQuery(document).ready(function() {
-                    jQuery('#sortSelect').on('change', function() {
-                        jQuery('#searchForm').submit();
-                    });
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery('#sortSelect').on('change', function() {
+                    jQuery('#searchForm').submit();
                 });
-            </script>
+            });
+        </script>
 <?php
     require dirname(__FILE__) . '/../footer.php';
