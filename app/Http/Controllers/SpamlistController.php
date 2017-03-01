@@ -733,7 +733,7 @@ class SpamlistController extends Controller
             $sortBy = $defaultSortOption;
         }
 
-        $queryBuilder = UserSpamlist::select(DB::raw('user_spamlists.*, users.nick, users.id as user_id'))
+        $queryBuilder = UserSpamlist::select(DB::raw('user_spamlists.*, user_spamlists.rights as spamlist_rights, users.nick, users.color, users.rights, users.id as user_id'))
                 ->join('users', 'users.id', '=', 'user_spamlists.user_id')
                 ->where('spamlist_id', '=', $entity['id'])
                 ->orderBy('user_spamlists.rights', 'desc');

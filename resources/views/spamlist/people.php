@@ -63,8 +63,8 @@
 <?php
         foreach ($paginator as $key => $foreachItem) {
 ?>
-                        <tr class="<?php echo $foreachItem['rights'] == 2 ? 'danger' : ($foreachItem['rights'] >= 20 ? 'success' : ''); ?>">
-                            <td><?php echo $foreachItem['nick']; ?></td>
+                        <tr class="<?php echo $foreachItem['spamlist_rights'] == 2 ? 'danger' : ($foreachItem['spamlist_rights'] >= 20 ? 'success' : ''); ?>">
+                            <td><?php echo $app->make('App\Services\TemplateService')->getUserProfileUrl($foreachItem); ?></td>
 <?php
             if ($canChangeRights) {
 ?>
@@ -73,9 +73,9 @@
                                     <div class="input-group" style="width: 300px">
                                         <select class="form-control" name="rights">
                                             <option value="2">zbanowany</option>
-                                            <option value="10"<?php echo $foreachItem['rights'] == 10 ? ' selected="selected"' : ''; ?>>użytkownik</option>
-                                            <option value="20"<?php echo $foreachItem['rights'] == 20 ? ' selected="selected"' : ''; ?>>wołający</option>
-                                            <option value="99"<?php echo $foreachItem['rights'] == 99 ? ' selected="selected"' : ''; ?>>administrator</option>
+                                            <option value="10"<?php echo $foreachItem['spamlist_rights'] == 10 ? ' selected="selected"' : ''; ?>>użytkownik</option>
+                                            <option value="20"<?php echo $foreachItem['spamlist_rights'] == 20 ? ' selected="selected"' : ''; ?>>wołający</option>
+                                            <option value="99"<?php echo $foreachItem['spamlist_rights'] == 99 ? ' selected="selected"' : ''; ?>>administrator</option>
                                             <option value="-1">-- USUŃ Z LISTY --</option>
                                         </select>
                                         <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
@@ -89,7 +89,7 @@
 <?php
             } else {
 ?>
-                            <td><?php echo $app->make('App\Services\SpamlistService')->getUserSpamlistRightsText($foreachItem['rights']); ?></td>
+                            <td><?php echo $app->make('App\Services\SpamlistService')->getUserSpamlistRightsText($foreachItem['spamlist_rights']); ?></td>
 <?php
             }
 ?>
