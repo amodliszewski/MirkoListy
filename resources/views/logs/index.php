@@ -54,9 +54,10 @@
                             <td><?php echo $foreachItem['created_at']; ?></td>
                             <td>
 <?php
-    if ($spamlist === null && is_object($foreachItem->spamlist)) {
+    if ($spamlist === null && is_object($foreachItem->spamlist()->withTrashed()->first())) {
+        $logSpamlist = $foreachItem->spamlist()->withTrashed()->first();
 ?>
-                    <a href="<?php echo route('getSpamlistUrl', array('uid' => $foreachItem->spamlist->uid)); ?>"><?php echo $app->make('App\Services\TemplateService')->clearValue($foreachItem->spamlist->name); ?></a> - 
+                    <a href="<?php echo route('getSpamlistUrl', array('uid' => $logSpamlist->uid)); ?>"><?php echo $app->make('App\Services\TemplateService')->clearValue($logSpamlist->name); ?></a> - 
 <?php
     }
 ?>
