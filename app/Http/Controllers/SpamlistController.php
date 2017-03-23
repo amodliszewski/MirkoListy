@@ -779,7 +779,7 @@ class SpamlistController extends Controller
         ));
     }
 
-    public function changeRights(Request $request, UserService $userService, SpamlistService $spamlistService, PaginationService $paginationService, $uid) {
+    public function changeRights(Request $request, UserService $userService, SpamlistService $spamlistService, $uid) {
         $validator = Validator::make($request->all(), [
             'userId' => 'required|integer',
             'rights' => 'required|in:-1,2,10,20,99'

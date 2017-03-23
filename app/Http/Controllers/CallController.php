@@ -105,36 +105,25 @@ class CallController extends Controller
         $type = (int) $request->get('type');
 
         $entryId = $wykopService->getEntryId($request->get('entryUrl'));
-        $linkId = $wykopService->getLinkId($request->get('entryUrl'));
 
-        if ($entryId === null && $linkId === null) {
-            $request->session()->flash('flashError', 'Niepoprawny adres wpisu/znaleziska');
+        if ($entryId === null) {
+            $request->session()->flash('flashError', 'Niepoprawny adres wpisu');
 
             return redirect()->back()->withInput();
         }
 
-        if ($entryId !== null) {
-            $entryData = $wykopService->getEntryData($entryId);
+        $entryData = $wykopService->getEntryData($entryId);
 
-            if ($entryData === null) {
-                $request->session()->flash('flashError', 'Nie udało się pobrać danych wpisu');
+        if ($entryData === null) {
+            $request->session()->flash('flashError', 'Nie udało się pobrać danych wpisu');
 
-                return redirect()->back()->withInput();
-            }
+            return redirect()->back()->withInput();
+        }
 
-            if (stripos($entryData['content'], 'rozdajo') !== false && $user->rights < User::RIGHTS_EXTENDED) {
-                $request->session()->flash('flashError', 'Wołanie do wpisów z #rozdajo jest zakazane!');
+        if (stripos($entryData['content'], 'rozdajo') !== false && $user->rights < User::RIGHTS_EXTENDED) {
+            $request->session()->flash('flashError', 'Wołanie do wpisów z #rozdajo jest zakazane!');
 
-                return redirect()->back()->withInput();
-            }
-        } else {
-            $linkData = $wykopService->getLinkData($linkId);
-
-            if ($linkData === null) {
-                $request->session()->flash('flashError', 'Nie udało się pobrać danych znaleziska');
-
-                return redirect()->back()->withInput();
-            }
+            return redirect()->back()->withInput();
         }
 
         $perComment = $callService->getGroupPerComment($request->session()->get('wykopGroup'));
@@ -257,7 +246,7 @@ class CallController extends Controller
 
             $log->save();
 
-            $callService->singleCallFromEntry($sourceEntryData, $sourceComment, $entryId, $linkId, $type, $perComment);
+            $callService->singleCallFromEntry($sourceEntryData, $sourceComment, $entryId, null, $type, $perComment);
         } else if (in_array($type, array(10, 11, 12, 13))) {
             $validator = Validator::make($request->all(), [
                 'sourceEntryUrl' => 'required|URL'
@@ -334,53 +323,31 @@ class CallController extends Controller
 
             $log->user_id = $user->id;
 
-            if ($entryId != null) {
-                $log->single_entry = $entryId;
+            $log->single_entry = $entryId;
 
-                if ($type === 10) {
-                    $log->type = Log::TYPE_SINGLE_CALL_LINK_DIGS;
+            if ($type === 10) {
+                $log->type = Log::TYPE_SINGLE_CALL_LINK_DIGS;
 
-                    $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) wykopujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
-                } else if ($type === 11) {
-                    $log->type = Log::TYPE_SINGLE_CALL_LINK_BURIES;
+                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) wykopujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
+            } else if ($type === 11) {
+                $log->type = Log::TYPE_SINGLE_CALL_LINK_BURIES;
 
-                    $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) zakopujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
-                } else if ($type === 12) {
-                    $log->type = Log::TYPE_SINGLE_CALL_LINK_COMMENTERS;
+                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) zakopujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
+            } else if ($type === 12) {
+                $log->type = Log::TYPE_SINGLE_CALL_LINK_COMMENTERS;
 
-                    $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) komentujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
-                } else if ($type === 13) {
-                    $log->type = Log::TYPE_SINGLE_CALL_LINK_ALL;
+                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) komentujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
+            } else if ($type === 13) {
+                $log->type = Log::TYPE_SINGLE_CALL_LINK_ALL;
 
-                    $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) aktywnych pod [tym znaleziskiem](http://wykop.pl/link/' . $sourceLinkId . ')';
-                }
-            } else {
-                $log->single_entry = $linkId;
-
-                if ($type === 10) {
-                    $log->type = Log::TYPE_SINGLE_LINK_CALL_LINK_DIGS;
-
-                    $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) wykopujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
-                } else if ($type === 11) {
-                    $log->type = Log::TYPE_SINGLE_LINK_CALL_LINK_BURIES;
-
-                    $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) zakopujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
-                } else if ($type === 12) {
-                    $log->type = Log::TYPE_SINGLE_LINK_CALL_LINK_COMMENTERS;
-
-                    $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) komentujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
-                } else if ($type === 13) {
-                    $log->type = Log::TYPE_SINGLE_LINK_CALL_LINK_ALL;
-
-                    $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) aktywnych pod [tym znaleziskiem](http://wykop.pl/link/' . $sourceLinkId . ')';
-                }
+                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) aktywnych pod [tym znaleziskiem](http://wykop.pl/link/' . $sourceLinkId . ')';
             }
 
             $log->single_source_entry = $sourceLinkId;
 
             $log->save();
 
-            $callService->singleCallCustom($entryId, $linkId, $firstCommentPrefix, $users, $perComment);
+            $callService->singleCallCustom($entryId, null, $firstCommentPrefix, $users, $perComment);
         } else if ($type === 20) {
             if (!$userService->isAdmin()) {
                 $request->session()->flash('flashError', 'Niestety nie masz odpowiednich uprawnień.');
@@ -406,21 +373,15 @@ class CallController extends Controller
 
             $log->user_id = $user->id;
 
-            if ($entryId != null) {
-                $log->single_entry = $entryId;
+            $log->single_entry = $entryId;
 
-                $log->type = Log::TYPE_SINGLE_CALL_OWNERS;
-            } else {
-                $log->single_entry = $linkId;
-
-                $log->type = Log::TYPE_LINK_SINGLE_CALL_OWNERS;
-            }
+            $log->type = Log::TYPE_SINGLE_CALL_OWNERS;
 
             $log->save();
 
             $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) właścicieli spamlist i wołających';
 
-            $callService->singleCallCustom($entryId, $linkId, $firstCommentPrefix, $users, $perComment);
+            $callService->singleCallCustom($entryId, null, $firstCommentPrefix, $users, $perComment);
         }
 
         $request->session()->flash('flashSuccess', 'Wołanie dodane do kolejki');
