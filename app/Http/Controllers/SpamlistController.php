@@ -433,7 +433,7 @@ class SpamlistController extends Controller
                 $users[] = $entity->user->nick;
             }
 
-            foreach ($pivotEntities as $pivotEntity) {var_dump($pivotEntity->user->sex);
+            foreach ($pivotEntities as $pivotEntity) {
                 if ($selectedSex !== 0 && $pivotEntity->user->sex !== $selectedSex) {
                     continue;
                 }
