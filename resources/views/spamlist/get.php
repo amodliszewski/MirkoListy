@@ -149,8 +149,16 @@
                         <p>Wklej link do Twojego wpisu i zawołaj zainteresowanych!</p>
                     </div>
                     <form method="POST" action="<?php echo route('postSpamlistCallUrl', array('uid' => $item['uid'])); ?>">
+                        <div>
+                            <select name="sex" class="form-control" style="width: 100%">
+                                <option value="0">zawołaj wszystkich</option>
+                                <option value="1">zawołaj tylko niebieskie paski</option>
+                                <option value="2">zawołaj tylko różowe paski</option>
+                            </select>
+                        </div>
+
                         <div class="input-group">
-                            <input type="text" name="entryUrl" class="form-control" />
+                            <input type="text" name="entryUrl" class="form-control" placeholder="tu wklej link do wpisu" />
                             <input type="hidden" name="spamlists[]" value="<?php echo $item['uid']; ?>" />
                             <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
                             <span class="input-group-btn">

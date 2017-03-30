@@ -307,7 +307,8 @@ class SpamlistController extends Controller
 
         $validator = Validator::make($request->all(), [
             'entryUrl' => 'required|URL',
-            'spamlists' => 'required|array'
+            'spamlists' => 'required|array',
+            'sex' => 'required|in:0,1,2'
         ]);
 
         if ($validator->fails()) {
@@ -373,30 +374,19 @@ class SpamlistController extends Controller
         }
 
         $entryId = $wykopService->getEntryId($request->get('entryUrl'));
-        $linkId = $wykopService->getLinkId($request->get('entryUrl'));
         
-        if ($entryId === null && $linkId === null) {
-            $request->session()->flash('flashError', 'Niepoprawny adres wpisu/znaleziska');
+        if ($entryId === null) {
+            $request->session()->flash('flashError', 'Niepoprawny adres wpisu');
 
             return redirect()->back();
         }
 
-        if ($entryId !== null) {
-            $entryData = $wykopService->getEntryData($entryId);
+        $entryData = $wykopService->getEntryData($entryId);
 
-            if ($entryData === null) {
-                $request->session()->flash('flashError', 'Nie udało się pobrać danych wpisu');
+        if ($entryData === null) {
+            $request->session()->flash('flashError', 'Nie udało się pobrać danych wpisu');
 
-                return redirect()->back();
-            }
-        } else {
-            $linkData = $wykopService->getLinkData($linkId);
-
-            if ($linkData === null) {
-                $request->session()->flash('flashError', 'Nie udało się pobrać danych znaleziska');
-
-                return redirect()->back();
-            }
+            return redirect()->back();
         }
 
         if (Cache::has('call_lock_' . $user->id)) {
@@ -413,6 +403,7 @@ class SpamlistController extends Controller
 
         $entities = array();
         $users = array();
+        $selectedSex = (int) $request->get('sex');
         foreach ($request->get('spamlists') as $spamlist) {
             $spamlist = preg_replace('/[^0-9A-Za-z]/', '', $spamlist);
 
@@ -442,59 +433,38 @@ class SpamlistController extends Controller
                 $users[] = $entity->user->nick;
             }
 
-            foreach ($pivotEntities as $pivotEntity) {
+            foreach ($pivotEntities as $pivotEntity) {var_dump($pivotEntity->user->sex);
+                if ($selectedSex !== 0 && $pivotEntity->user->sex !== $selectedSex) {
+                    continue;
+                }
+
                 if (!in_array($pivotEntity->user->nick, $users)) {
                     $users[] = $pivotEntity->user->nick;
                 }
             }
 
-            if ($entryId !== null) {
-                $call = Call::where('entry_id', '=', $entryData['entry_id'])
-                        ->where('spamlist_id', '=', $entity['id'])
-                        ->first();
+            $call = Call::where('entry_id', '=', $entryData['entry_id'])
+                    ->where('spamlist_id', '=', $entity['id'])
+                    ->first();
 
-                if ($call === null) {
-                    $call = new Call();
+            if ($call === null) {
+                $call = new Call();
 
-                    $call->user_id = $user['id'];
-                    $call->spamlist_id = $entity['id'];
-                    $call->entry_id = $entryData['entry_id'];
-                }
-
-                $call->author = $entryData['author'];
-                $call->author_avatar = $entryData['author_avatar'];
-                $call->author_sex = $entryData['author_sex'];
-                $call->author_group = $entryData['author_group'];
-                $call->posted_at = $entryData['posted_at'];
-                $call->content = $entryData['content'];
-                $call->image_url = $entryData['image_url'];
-                $call->big_image_url = $entryData['big_image_url'];
-
-                $call->save();
-            } else {
-                $call = Call::where('link_id', '=', $linkData['link_id'])
-                        ->where('spamlist_id', '=', $entity['id'])
-                        ->first();
-
-                if ($call === null) {
-                    $call = new Call();
-
-                    $call->user_id = $user['id'];
-                    $call->spamlist_id = $entity['id'];
-                    $call->link_id = $linkData['link_id'];
-                }
-
-                $call->author = $linkData['author'];
-                $call->author_avatar = $linkData['author_avatar'];
-                $call->author_sex = $linkData['author_sex'];
-                $call->author_group = $linkData['author_group'];
-                $call->posted_at = $linkData['posted_at'];
-                $call->content = $linkData['title'] . '<br />' . $linkData['title'];
-                $call->image_url = $linkData['preview'];
-                $call->big_image_url = $linkData['preview'];
-
-                $call->save();
+                $call->user_id = $user['id'];
+                $call->spamlist_id = $entity['id'];
+                $call->entry_id = $entryData['entry_id'];
             }
+
+            $call->author = $entryData['author'];
+            $call->author_avatar = $entryData['author_avatar'];
+            $call->author_sex = $entryData['author_sex'];
+            $call->author_group = $entryData['author_group'];
+            $call->posted_at = $entryData['posted_at'];
+            $call->content = $entryData['content'];
+            $call->image_url = $entryData['image_url'];
+            $call->big_image_url = $entryData['big_image_url'];
+
+            $call->save();
 
             $log = new Log();
 
@@ -519,7 +489,7 @@ class SpamlistController extends Controller
 
         $user->save();
 
-        $callService->call($entities, $entryId, $linkId, $users, $perComment);
+        $callService->call($entities, $entryId, null, $users, $perComment);
 
         $request->session()->flash('flashSuccess', 'Wołanie dodane do kolejki');
 
