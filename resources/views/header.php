@@ -33,6 +33,14 @@
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery('img.avatar, img.img-polaroid').on('error', function() {
+                    this.src = 'https://wykop.pl/cdn/c3397992/avatar_def.png';
+                })
+            });
+        </script>
     </head>
     <body>
         <div class="theme-changer change-style">
