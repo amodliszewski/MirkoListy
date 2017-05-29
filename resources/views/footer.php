@@ -54,35 +54,39 @@
                     });
                 }
 
-                jQuery.notify.addStyle('donation', {
-                    html: '<div><div class="notifyjs-wrapper notifyjs-hidable">\
-	<div class="notifyjs-arrow" style=""></div>\
-	<div class="notifyjs-container"><div class="notifyjs-bootstrap-base notifyjs-bootstrap-error">\
-<span data-notify-html></span>\
-</div></div>\
-</div></div>'
-                });
+                var chance = Math.random() * 100;
 
-                /*jQuery.notify('Uważasz MirkoListy za przydatne narzędzie, bez którego życie byłoby ciężkie?<br /><br />Pomóż w jego utrzymaniu!<br /><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G9RBBPAMKD738" style="color: green">Przeznacz kilka złotych na opłacenie serwera i domeny klikając tutaj!<a/><br /><br />Każda złotówka się liczy.', {
-                    position: 'bottom left',
-                    autoHide: false,
-                    style: 'donation'
-                });*/
+                if (chance < 20) {
+                    jQuery.notify.addStyle('donation', {
+                        html: '<div><div class="notifyjs-wrapper notifyjs-hidable">\
+            <div class="notifyjs-arrow" style=""></div>\
+            <div class="notifyjs-container"><div class="notifyjs-bootstrap-base notifyjs-bootstrap-error">\
+    <span data-notify-html></span>\
+    </div></div>\
+    </div></div>'
+                    });
 
-                jQuery.notify.addStyle('info', {
-                    html: '<div><div class="notifyjs-wrapper notifyjs-hidable">\
-	<div class="notifyjs-arrow" style=""></div>\
-	<div class="notifyjs-container"><div class="notifyjs-bootstrap-base notifyjs-bootstrap-info">\
-<span data-notify-html></span>\
-</div></div>\
-</div></div>'
-                });
+                    jQuery.notify('Uważasz MirkoListy za przydatne narzędzie, bez którego życie byłoby ciężkie?<br /><br />Pomóż w jego utrzymaniu!<br /><a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=G9RBBPAMKD738" style="color: green">Przeznacz kilka złotych na opłacenie serwera i domeny klikając tutaj!<a/><br /><br />Każda złotówka się liczy.', {
+                        position: 'bottom left',
+                        autoHide: false,
+                        style: 'donation'
+                    });
+                } else if (chance < 50) {
+                    jQuery.notify.addStyle('info', {
+                        html: '<div><div class="notifyjs-wrapper notifyjs-hidable">\
+            <div class="notifyjs-arrow" style=""></div>\
+            <div class="notifyjs-container"><div class="notifyjs-bootstrap-base notifyjs-bootstrap-info">\
+    <span data-notify-html></span>\
+    </div></div>\
+    </div></div>'
+                    });
 
-                jQuery.notify('Chcesz być na bieżąco ze zmianami na stronie<br />i dodatkowo zmotywować autora do dalszego jej rozwoju?<br /><br />Obserwuj <a href="http://www.wykop.pl/tag/mirkolisty/" style="color: green">#mirkolisty</a> i/lub <a href="http://www.wykop.pl/ludzie/IrvinTalvanen/" style="color: green">@IrvinTalvanen</a>', {
-                    position: 'bottom left',
-                    autoHide: false,
-                    style: 'info'
-                });
+                    jQuery.notify('Chcesz być na bieżąco ze zmianami na stronie<br />i dodatkowo zmotywować autora do dalszego jej rozwoju?<br /><br />Obserwuj <a href="http://www.wykop.pl/tag/mirkolisty/" style="color: green">#mirkolisty</a> i/lub <a href="http://www.wykop.pl/ludzie/IrvinTalvanen/" style="color: green">@IrvinTalvanen</a>', {
+                        position: 'bottom left',
+                        autoHide: false,
+                        style: 'info'
+                    });
+                }
             })
         </script>
 
