@@ -75,7 +75,7 @@
 
                 <div style="text-align: center">
 <?php
-    echo $paginator->render();
+    echo $paginator->appends(\Illuminate\Support\Facades\Input::except('page'))->render();
 ?>
                 </div>
             </div>
