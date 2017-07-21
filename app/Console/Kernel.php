@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         'App\Console\Commands\Scheduled',
+        'App\Console\Commands\RefreshSpamlistUsers',
         'WykoCommon\Console\Commands\ProcessQueue'
     ];
 
