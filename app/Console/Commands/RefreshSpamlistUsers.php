@@ -62,6 +62,12 @@ class RefreshSpamlistUsers extends Command
         foreach ($items as $key => $item) {
             $result = $this->wykopAPI->doRequest('profile/index/' . $item->user->nick . ',userkey,' . $item->user_key);
 
+            if (!isset($result['login'])) {
+                $this->warn('Ignoruję ' . $item->user->nick);
+
+                continue;
+            }
+
             $item->user->nick = $result['login'];
             $item->user->avatar_url = $result['avatar_med'];
             $item->user->color = $result['author_group'];
@@ -78,7 +84,7 @@ class RefreshSpamlistUsers extends Command
 
             $item->user->save();
 
-            $this->info('Zaktualizowano ' . ($key + 1 ) . ' / ' . $items->count());
+            $this->info('Zaktualizowano ' . ($key + 1 ) . ' / ' . $items->count() . ' - ' . $item->user->nick);
 
             if ($key % 9 === 0) {
                 sleep(5);
