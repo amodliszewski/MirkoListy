@@ -105,7 +105,7 @@
 ?>
                         <div class="input-group" style="padding-top: 15px">
                             <div>
-                                <button class="btn btn-default" type="submit" onClick="alert('Musisz się najpierw zalogować!'); return false">dołącz</button>
+                                <button class="btn btn-default" disabled="disabled" type="submit">zaloguj się jeśli chcesz dołączyć</button>
                             </div>
                         </div>
 <?php
