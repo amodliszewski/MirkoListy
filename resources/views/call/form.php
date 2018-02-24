@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-12">
                 <h3>Wykluczenie z wołania</h3>
-                <p>Jeśli nie chcesz być wołany bo pojedynczych wpisów (np. jako komentujący czy plusujący) użyj poniższego przycisku.</p>
+                <p>Jeśli nie chcesz być wołany do pojedynczych wpisów (np. jako komentujący czy plusujący) użyj poniższego przycisku.</p>
                 <p>Opcja ta nie dotyczy list, na które się zapisujesz (z nich nadal będziesz otrzymywał powiadomienia).</p>
 
                 <form method="POST" action="/call/optout">
