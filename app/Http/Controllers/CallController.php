@@ -328,19 +328,19 @@ class CallController extends Controller
             if ($type === 10) {
                 $log->type = Log::TYPE_SINGLE_CALL_LINK_DIGS;
 
-                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) wykopujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
+                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) wykopujących [to znalezisko](' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $sourceLinkId . ')';
             } else if ($type === 11) {
                 $log->type = Log::TYPE_SINGLE_CALL_LINK_BURIES;
 
-                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) zakopujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
+                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) zakopujących [to znalezisko](' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $sourceLinkId . ')';
             } else if ($type === 12) {
                 $log->type = Log::TYPE_SINGLE_CALL_LINK_COMMENTERS;
 
-                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) komentujących [to znalezisko](http://wykop.pl/link/' . $sourceLinkId . ')';
+                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) komentujących [to znalezisko](' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $sourceLinkId . ')';
             } else if ($type === 13) {
                 $log->type = Log::TYPE_SINGLE_CALL_LINK_ALL;
 
-                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) aktywnych pod [tym znaleziskiem](http://wykop.pl/link/' . $sourceLinkId . ')';
+                $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) aktywnych pod [tym znaleziskiem](' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $sourceLinkId . ')';
             }
 
             $log->single_source_entry = $sourceLinkId;

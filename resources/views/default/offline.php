@@ -11,7 +11,7 @@
             <p>Strona obecnie działa w trybie offline i wołanie nie jest możliwe.</p>
             <p>Użytkownicy zostaną powiadomieni w momencie powrotu do normalnego działania.</p>
             <p></p>
-            <p><a href="http://www.wykop.pl/wpis/21366309/mirkolisty-wykop-programujzwykopem-dodatki-w-zwiaz/">Wpis wyjaśniający.</a></p>
+            <p><a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>wpis/21366309/mirkolisty-wykop-programujzwykopem-dodatki-w-zwiaz/">Wpis wyjaśniający.</a></p>
         </div>
 
 <?php

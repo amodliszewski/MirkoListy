@@ -11,10 +11,10 @@ class LogService extends Base
             case Log::TYPE_CALL:
                 if ($log->call->link_id !== null) {
                     return $this->templateService->getUserProfileUrl($log->user)
-                        . ' zawołał do <a href="http://wykop.pl/link/' . $log->call->link_id . '" rel="nofollow">znaleziska</a>';
+                        . ' zawołał do <a href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->call->link_id . '" rel="nofollow">znaleziska</a>';
                 } else {
                     return $this->templateService->getUserProfileUrl($log->user)
-                        . ' zawołał do <a href="http://wykop.pl/wpis/' . $log->call->entry_id . '" rel="nofollow">wpisu</a>';
+                        . ' zawołał do <a href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->call->entry_id . '" rel="nofollow">wpisu</a>';
                 }
 
             case Log::TYPE_JOINED_SELF:
@@ -73,83 +73,83 @@ class LogService extends Base
 
             case Log::TYPE_SINGLE_CALL_VOTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_VOTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_VOTERS_AND_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał plusujących i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał plusujących i komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_VOTERS_AND_COMMENTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_OWNERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał właścicieli spamlist do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał właścicieli spamlist do <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_DIGS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał wykopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał wykopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_BURIES:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał zakopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał zakopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał komentujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_ALL:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał aktywnych w <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał aktywnych w <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS_AND_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał plusujących i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał plusujących i komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS_AND_COMMENTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_OWNERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał właścicieli spamlist do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał właścicieli spamlist do <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_DIGS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał wykopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał wykopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_BURIES:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał zakopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał zakopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał komentujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_ALL:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał aktywnych w <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał aktywnych w <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             default:
                 return 'nieznane wydarzenie';
@@ -161,10 +161,10 @@ class LogService extends Base
             case Log::TYPE_CALL:
                 if ($log->call->link_id !== null) {
                     return $this->templateService->getUserProfileUrl($log->user)
-                        . ' zawołała do <a href="http://wykop.pl/link/' . $log->call->link_id . '" rel="nofollow">znaleziska</a>';
+                        . ' zawołała do <a href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->call->link_id . '" rel="nofollow">znaleziska</a>';
                 } else {
                     return $this->templateService->getUserProfileUrl($log->user)
-                        . ' zawołała do <a href="http://wykop.pl/wpis/' . $log->call->entry_id . '" rel="nofollow">wpisu</a>';
+                        . ' zawołała do <a href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->call->entry_id . '" rel="nofollow">wpisu</a>';
                 }
 
             case Log::TYPE_JOINED_SELF:
@@ -223,83 +223,83 @@ class LogService extends Base
 
             case Log::TYPE_SINGLE_CALL_VOTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_VOTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_VOTERS_AND_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała plusujących i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała plusujących i komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_VOTERS_AND_COMMENTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_OWNERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała właścicieli spamlist do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała właścicieli spamlist do <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_DIGS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała wykopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała wykopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_BURIES:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała zakopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała zakopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała komentujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_ALL:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała aktywnych w <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołała aktywnych w <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS_AND_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała plusujących i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała plusujących i komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS_AND_COMMENTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_OWNERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała właścicieli spamlist do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała właścicieli spamlist do <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_DIGS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała wykopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała wykopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_BURIES:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała zakopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała zakopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała komentujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_ALL:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołała aktywnych w <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołała aktywnych w <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             default:
                 return 'nieznane wydarzenie';
@@ -310,10 +310,10 @@ class LogService extends Base
             case Log::TYPE_CALL:
                 if ($log->call->link_id !== null) {
                     return $this->templateService->getUserProfileUrl($log->user)
-                        . ' zawołał(a) do <a href="http://wykop.pl/link/' . $log->call->link_id . '" rel="nofollow">znaleziska</a>';
+                        . ' zawołał(a) do <a href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->call->link_id . '" rel="nofollow">znaleziska</a>';
                 } else {
                     return $this->templateService->getUserProfileUrl($log->user)
-                        . ' zawołał(a) do <a href="http://wykop.pl/wpis/' . $log->call->entry_id . '" rel="nofollow">wpisu</a>';
+                        . ' zawołał(a) do <a href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->call->entry_id . '" rel="nofollow">wpisu</a>';
                 }
 
             case Log::TYPE_JOINED_SELF:
@@ -372,83 +372,83 @@ class LogService extends Base
 
             case Log::TYPE_SINGLE_CALL_VOTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_VOTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_VOTERS_AND_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) plusujących i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) plusujących i komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_VOTERS_AND_COMMENTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_OWNERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) właścicieli spamlist do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) właścicieli spamlist do <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_DIGS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) wykopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) wykopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_BURIES:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) zakopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) zakopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) komentujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_CALL_LINK_ALL:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) aktywnych w <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
+                    . ' zawołał(a) aktywnych w <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_entry . '">tego wpisu</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS_AND_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) plusujących i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) plusujących i komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_VOTERS_AND_COMMENTERS_COMMENT:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) plusujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) plusujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'wpis/' . $log->single_source_entry . '/#comment-' . $log->single_source_comment . '">ten komentarz</a> i komentujących <a rel="nofollow" href="http://wykop.pl/wpis/' . $log->single_source_entry . '">ten wpis</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_OWNERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) właścicieli spamlist do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) właścicieli spamlist do <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_DIGS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) wykopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) wykopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_BURIES:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) zakopujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) zakopujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_COMMENTERS:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) komentujących <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) komentujących <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">to znalezisko</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             case Log::TYPE_SINGLE_LINK_CALL_LINK_ALL:
                 return $this->templateService->getUserProfileUrl($log->user)
-                    . ' zawołał(a) aktywnych w <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
+                    . ' zawołał(a) aktywnych w <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="http://wykop.pl/link/' . $log->single_entry . '">tego znaleziska</a>';
 
             default:
                 return 'nieznane wydarzenie';

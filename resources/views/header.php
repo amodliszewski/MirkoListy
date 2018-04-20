@@ -162,7 +162,7 @@
     if ($visibleLinks < 9) {
 ?>
                         <li>
-                            <a href="http://www.wykop.pl/dodatki/pokaz/747/">Notatkowator</a>
+                            <a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>dodatki/pokaz/747/">Notatkowator</a>
                         </li>
 <?php
     }

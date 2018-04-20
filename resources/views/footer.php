@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <p>
-                            Copyright &copy; mirkolisty.pvu.pl 2015-<?php echo date('Y'); ?> | Administrator: <a href="http://wykop.pl/ludzie/IrvinTalvanen" rel="nofollow">IrvinTalvanen</a>
+                            Copyright &copy; mirkolisty.pvu.pl 2015-<?php echo date('Y'); ?> | Administrator: <a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>ludzie/IrvinTalvanen" rel="nofollow">IrvinTalvanen</a>
 <?php
     if (@$_ENV['APP_ENV'] !== 'production') {
         echo ' | devel';
@@ -81,7 +81,7 @@
     </div></div>'
                     });
 
-                    jQuery.notify('Chcesz być na bieżąco ze zmianami na stronie<br />i dodatkowo zmotywować autora do dalszego jej rozwoju?<br /><br />Obserwuj <a href="http://www.wykop.pl/tag/mirkolisty/" style="color: green">#mirkolisty</a> i/lub <a href="http://www.wykop.pl/ludzie/IrvinTalvanen/" style="color: green">@IrvinTalvanen</a>', {
+                    jQuery.notify('Chcesz być na bieżąco ze zmianami na stronie<br />i dodatkowo zmotywować autora do dalszego jej rozwoju?<br /><br />Obserwuj <a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>tag/mirkolisty/" style="color: green">#mirkolisty</a> i/lub <a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>ludzie/IrvinTalvanen/" style="color: green">@IrvinTalvanen</a>', {
                         position: 'bottom left',
                         autoHide: false,
                         style: 'info'

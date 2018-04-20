@@ -48,11 +48,11 @@
 <?php
             if ($foreachItem['link_id'] !== null) {
 ?>
-                <a class="btn btn-primary" rel="nofollow" href="http://wykop.pl/link/<?php echo $foreachItem['link_id']; ?>">Przejdź do znaleziska <i class="fa fa-angle-right"></i></a>
+                <a class="btn btn-primary" rel="nofollow" href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>link/<?php echo $foreachItem['link_id']; ?>">Przejdź do znaleziska <i class="fa fa-angle-right"></i></a>
 <?php
             } else {
 ?>
-                <a class="btn btn-primary" rel="nofollow" href="http://wykop.pl/wpis/<?php echo $foreachItem['entry_id']; ?>">Przejdź do wpisu <i class="fa fa-angle-right"></i></a>
+                <a class="btn btn-primary" rel="nofollow" href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>wpis/<?php echo $foreachItem['entry_id']; ?>">Przejdź do wpisu <i class="fa fa-angle-right"></i></a>
 <?php
             }
 ?>
@@ -76,7 +76,7 @@
                         <div class="input-group">
                             Założona przez:<br />
                             <p>
-                                <a href="http://wykop.pl/ludzie/<?php echo $item->user->nick; ?>" rel="nofollow" target="_blank" style="color: <?php echo $app->make('WykoCommon\Services\TemplateService')->getGroupColor($item->user->color); ?>">
+                                <a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>ludzie/<?php echo $item->user->nick; ?>" rel="nofollow" target="_blank" style="color: <?php echo $app->make('WykoCommon\Services\TemplateService')->getGroupColor($item->user->color); ?>">
                                     <img src="<?php echo $item->user->avatar_url; ?>" class="img-polaroid <?php echo $app->make('App\Services\TemplateService')->getSexClass($item->user->sex); ?>" />
                                     <span style="margin-left: 10px;"><?php echo $item->user->nick; ?></span>
                                 </a>

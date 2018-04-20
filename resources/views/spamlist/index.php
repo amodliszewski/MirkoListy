@@ -73,7 +73,7 @@
 ?>
                     <tr>
                         <td style="text-align: center">
-                            <a href="http://wykop.pl/ludzie/<?php echo $loopItem->user->nick; ?>" target="_blank" rel="nofollow">
+                            <a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>ludzie/<?php echo $loopItem->user->nick; ?>" target="_blank" rel="nofollow">
                                 <img src="<?php echo $loopItem->user->avatar_url; ?>" class="img-polaroid <?php echo $app->make('App\Services\TemplateService')->getSexClass($loopItem->user->sex); ?>" />
                                 <br />
                                 <span style="color: #FF5917;" class="visible-desktop"><?php echo $loopItem->user->nick; ?></span>   

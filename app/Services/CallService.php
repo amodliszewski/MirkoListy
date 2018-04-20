@@ -12,33 +12,33 @@ class CallService extends Base
         $firstCommentPrefix = 'Wołam przez [MirkoListy](https://mirkolisty.pvu.pl) ';
         if ($type === 1) {
             if ($sourceComment !== null) {
-                $firstCommentPrefix .= "plusujących [ten komentarz](http://wykop.pl/wpis/" . $sourceEntry['entry_id'] . "/#comment-" . $sourceComment['id'] . ")";
+                $firstCommentPrefix .= "plusujących [ten komentarz](" . $_ENV['WYKOP_BASE_URL'] . "wpis/" . $sourceEntry['entry_id'] . "/#comment-" . $sourceComment['id'] . ")";
 
                 foreach ($sourceComment['voters'] as $user) {
                     $users[] = $user['author'];
                 }
             } else {
-                $firstCommentPrefix .= "plusujących [ten wpis](http://wykop.pl/wpis/" . $sourceEntry['entry_id'] . ")";
+                $firstCommentPrefix .= "plusujących [ten wpis](" . $_ENV['WYKOP_BASE_URL'] . "wpis/" . $sourceEntry['entry_id'] . ")";
 
                 foreach ($sourceEntry['voters'] as $user) {
                     $users[] = $user['author'];
                 }
             }
         } else if ($type === 2) {
-            $firstCommentPrefix .= "komentujących [ten wpis](http://wykop.pl/wpis/" . $sourceEntry['entry_id'] . ")";
+            $firstCommentPrefix .= "komentujących [ten wpis](" . $_ENV['WYKOP_BASE_URL'] . "wpis/" . $sourceEntry['entry_id'] . ")";
 
             foreach ($sourceEntry['comments'] as $user) {
                 $users[] = $user['author'];
             }
         } else if ($type === 3) {
             if ($sourceComment !== null) {
-                $firstCommentPrefix .= "plusujących [ten komentarz](http://wykop.pl/wpis/" . $sourceEntry['entry_id'] . "/#comment-" . $sourceComment['id'] . ") i komentujących [ten wpis](http://wykop.pl/wpis/" . $sourceEntry['entry_id'] . ")";
+                $firstCommentPrefix .= "plusujących [ten komentarz](" . $_ENV['WYKOP_BASE_URL'] . "wpis/" . $sourceEntry['entry_id'] . "/#comment-" . $sourceComment['id'] . ") i komentujących [ten wpis](http://wykop.pl/wpis/" . $sourceEntry['entry_id'] . ")";
 
                 foreach ($sourceComment['voters'] as $user) {
                     $users[] = $user['author'];
                 }
             } else {
-                $firstCommentPrefix .= "plusujących i komentujących [ten wpis](http://wykop.pl/wpis/" . $sourceEntry['entry_id'] . ")";
+                $firstCommentPrefix .= "plusujących i komentujących [ten wpis](" . $_ENV['WYKOP_BASE_URL'] . "wpis/" . $sourceEntry['entry_id'] . ")";
 
                 foreach ($sourceEntry['voters'] as $user) {
                     $users[] = $user['author'];
@@ -88,8 +88,8 @@ class CallService extends Base
 
         $firstCommentPrefix .= ' (' . count($preparedUsers) . ")\n\n";
         $firstCommentPrefix .= "Dodatek wspierany przez [**Cebula.Online**](https://cebula.online/?utm_source=social&utm_medium=wykop&utm_campaign=mirkolisty)\n\n";
-        $firstCommentPrefix .= "Nie chcesz być wołany/a jako plusujący/a? Włącz blokadę na https://mirkolisty.pvu.pl/call lub odezwij się do @[IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)";
-        $firstCommentPrefix .= "\n\nUważasz, że wołający nadużywa MirkoList? Daj znać @[IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)\n\n";
+        $firstCommentPrefix .= "Nie chcesz być wołany/a jako plusujący/a? Włącz blokadę na https://mirkolisty.pvu.pl/call lub odezwij się do @[IrvinTalvanen](" . $_ENV['WYKOP_BASE_URL'] . "IrvinTalvanen/)";
+        $firstCommentPrefix .= "\n\nUważasz, że wołający nadużywa MirkoList? Daj znać @[IrvinTalvanen](" . $_ENV['WYKOP_BASE_URL'] . "ludzie/IrvinTalvanen/)\n\n";
 
         $this->saveQueue($firstCommentPrefix, $preparedUsers, $entryId, $linkId, $perComment);
     }
@@ -111,7 +111,7 @@ class CallService extends Base
 
         $firstCommentPrefix .= "**Możesz zapisać/wypisać się klikając na nazwę listy.**\n\n";
         $firstCommentPrefix .= "Dodatek wspierany przez [**Cebula.Online**](https://cebula.online/?utm_source=social&utm_medium=wykop&utm_campaign=mirkolisty)\n\n";
-        $firstCommentPrefix .= "Masz problem z działaniem listy? A może pytanie? Pisz do [IrvinTalvanen](http://www.wykop.pl/ludzie/IrvinTalvanen/)\n\n";
+        $firstCommentPrefix .= "Masz problem z działaniem listy? A może pytanie? Pisz do [IrvinTalvanen](" . $_ENV['WYKOP_BASE_URL'] . "ludzie/IrvinTalvanen/)\n\n";
 
         $prepared = array();
 

@@ -32,7 +32,7 @@ class RightsController extends Controller
         $subject = User::where('nick', $request->get('nick'))->first();
 
         if ($subject === null) {
-            $content = @file_get_contents('http://www.wykop.pl/ludzie/' . $request->get('nick'));
+            $content = @file_get_contents($_ENV['WYKOP_BASE_URL'] . 'ludzie/' . $request->get('nick'));
 
             $matches = [];
 

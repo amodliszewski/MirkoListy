@@ -8,7 +8,7 @@
                 <br /><br />
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <a href="http://wykop.pl/ludzie/<?php echo $item->nick; ?>" rel="nofollow" target="_blank" style="color: <?php echo $app->make('WykoCommon\Services\TemplateService')->getGroupColor($item->color); ?>">
+                        <a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>ludzie/<?php echo $item->nick; ?>" rel="nofollow" target="_blank" style="color: <?php echo $app->make('WykoCommon\Services\TemplateService')->getGroupColor($item->color); ?>">
                             <img src="<?php echo $item->avatar_url; ?>" class="img-polaroid <?php echo $app->make('App\Services\TemplateService')->getSexClass($item->sex); ?>" />
                             <span style="margin-left: 10px;"><?php echo $item->nick; ?></span>
                         </a>

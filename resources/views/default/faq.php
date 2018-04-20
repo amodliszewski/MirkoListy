@@ -16,7 +16,7 @@
         array(
             'title' => 'Nie przyznałem aplikacji uprawnień do pisania a chciałbym prowadzić swoją spamlistę. Co robić?',
             'content' => 'Po pierwsze musisz wylogować się z aplikacji MirkoListy.<br />
-                            Następnie usunąć ją z listy uprawnionych do korzystania z Twojego konta na wykopie (tutaj <a href="http://www.wykop.pl/ustawienia/sesje/">http://www.wykop.pl/ustawienia/sesje/</a> ).<br />
+                            Następnie usunąć ją z listy uprawnionych do korzystania z Twojego konta na wykopie (tutaj <a href="' . $_ENV['WYKOP_BASE_URL'] . 'ustawienia/sesje/">' . $_ENV['WYKOP_BASE_URL'] . 'ustawienia/sesje/</a> ).<br />
                             Teraz możesz już ponownie zalogować się do MirkoList i zaznaczyć wymagane uprawnienia.'
         ),
         array(
