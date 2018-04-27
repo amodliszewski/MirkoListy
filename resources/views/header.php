@@ -134,12 +134,18 @@
         }
 
         $currentUser = $app->make('WykoCommon\Services\UserService')->getCurrentUser();
-        if ($currentUser !== null && $currentUser->rights == 99) {
-            $visibleLinks += 2;
+        if ($currentUser !== null && $currentUser->rights >= 20) {
+            $visibleLinks += 1;
 ?>
                         <li>
                             <a href="<?php echo route('getScheduledItemsUrl'); ?>">Zaplanowane</a>
                         </li>
+<?php
+        }
+
+        if ($currentUser !== null && $currentUser->rights == 99) {
+            $visibleLinks += 1;
+?>
                         <li>
                             <a href="<?php echo route('searchProfileUrl'); ?>">Profile</a>
                         </li>
