@@ -133,7 +133,8 @@
                             <select class="form-control" name="rights">
                                 <option value="2">zbanowany</option>
                                 <option value="10"<?php echo $item->rights === 10 ? ' selected="selected"' : ''; ?>>użytkownik</option>
-                                <option value="20"<?php echo $item->rights === 20 ? ' selected="selected"' : ''; ?>>moderator</option>
+                                <option value="20"<?php echo $item->rights === 20 ? ' selected="selected"' : ''; ?>>użytkownik+</option>
+                                <option value="20"<?php echo $item->rights === 50 ? ' selected="selected"' : ''; ?>>moderator</option>
                                 <option value="99"<?php echo $item->rights === 99 ? ' selected="selected"' : ''; ?>>administrator</option>
                             </select>
                             <p class="help-block"></p>
