@@ -298,8 +298,6 @@ class SpamlistController extends Controller
 
     public function call(Request $request,
             UserService $userService,
-            CallService $callService,
-            WykopService $wykopService,
             SpamlistService $spamlistService) {
         if (isset($_ENV['IS_OFFLINE']) && $_ENV['IS_OFFLINE'] == 1) {
             return redirect(route('offline'));
@@ -365,133 +363,9 @@ class SpamlistController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $perComment = $callService->getGroupPerComment($request->session()->get('wykopGroup'));
-
-        if ($perComment === 0) {
-            $request->session()->flash('flashError', 'Twoje konto nie ma uprawnień do wołania.');
-
-            return redirect()->back();
-        }
-
-        $entryId = $wykopService->getEntryId($request->get('entryUrl'));
-        
-        if ($entryId === null) {
-            $request->session()->flash('flashError', 'Niepoprawny adres wpisu');
-
-            return redirect()->back();
-        }
-
-        $entryData = $wykopService->getEntryData($entryId);
-
-        if ($entryData === null) {
-            $request->session()->flash('flashError', 'Nie udało się pobrać danych wpisu');
-
-            return redirect()->back();
-        }
-
-        if (Cache::has('call_lock_' . $user->id)) {
-            $latestCallDate = new \DateTime(Cache::get('call_lock_' . $user->id));
-
-            $request->session()->flash('flashError', 'Musisz poczekać <span class="countdownTimer">' . $latestCallDate->format('Y-m-d H:i:s') . '</span> min zanim zawołasz ponownie.');
-
+        if (!$spamlistService->call($user, $request->get('entryUrl'), (int) $this->request->get('sex'), $this->request->get('spamlists'))) {
             return redirect()->back()->withInput();
         }
-
-        $callDate = new \DateTime('+' . $_ENV['CALLS_DELAY_MINUTES'] . ' minutes');
-
-        Cache::put('call_lock_' . $user->id, $callDate->format('Y-m-d H:i:s'), $_ENV['CALLS_DELAY_MINUTES']);
-
-        $entities = array();
-        $users = array();
-        $selectedSex = (int) $request->get('sex');
-        foreach ($request->get('spamlists') as $spamlist) {
-            $spamlist = preg_replace('/[^0-9A-Za-z]/', '', $spamlist);
-
-            $entity = Spamlist::where('uid', '=', $spamlist)->first();
-
-            if ($entity === null) {
-                $request->session()->flash('flashError', 'Lista ' . $spamlist . ' nie istnieje');
-
-                return redirect()->back();
-            }
-
-            if (!$spamlistService->checkRights($entity, $user, UserSpamlist::ACTION_CALL)) {
-                $request->session()->flash('flashError', 'Nie masz odpowiednich uprawnień do listy wołania listy ' . $entity->name);
-
-                return redirect()->back();
-            }
-
-            $pivotEntities = UserSpamlist::where('spamlist_id', '=', $entity['id'])
-                    ->where('rights', '!=', 2)
-                    ->get();
-
-            if ($pivotEntities->count() === 0) {
-                continue;
-            }
-
-            if (!in_array($entity->user->nick, $users)) {
-                $users[] = $entity->user->nick;
-            }
-
-            foreach ($pivotEntities as $pivotEntity) {
-                if ($selectedSex !== 0 && $pivotEntity->user->sex !== $selectedSex) {
-                    continue;
-                }
-
-                if (!in_array($pivotEntity->user->nick, $users)) {
-                    $users[] = $pivotEntity->user->nick;
-                }
-            }
-
-            $call = Call::where('entry_id', '=', $entryData['entry_id'])
-                    ->where('spamlist_id', '=', $entity['id'])
-                    ->first();
-
-            if ($call === null) {
-                $call = new Call();
-
-                $call->user_id = $user['id'];
-                $call->spamlist_id = $entity['id'];
-                $call->entry_id = $entryData['entry_id'];
-            }
-
-            $call->author = $entryData['author'];
-            $call->author_avatar = $entryData['author_avatar'];
-            $call->author_sex = $entryData['author_sex'];
-            $call->author_group = $entryData['author_group'];
-            $call->posted_at = $entryData['posted_at'];
-            $call->content = $entryData['content'];
-            $call->image_url = $entryData['image_url'];
-            $call->big_image_url = $entryData['big_image_url'];
-
-            $call->save();
-
-            $log = new Log();
-
-            $log->user_id = $user->id;
-            $log->type = Log::TYPE_CALL;
-            $log->spamlist_id = $entity->id;
-            $log->call_id = $call->id;
-
-            $log->save();
-
-            $entity->called_count++;
-            $entity->last_called_at = date('Y-m-d H:i:s');
-            $entity->timestamps = false;
-
-            $entity->save();
-
-            $entities[] = $entity;
-        }
-
-        $user->called_count++;
-        $user->timestamps = false;
-
-        $user->save();
-
-        $callService->call($entities, $entryId, null, $users, $perComment);
-
-        $request->session()->flash('flashSuccess', 'Wołanie dodane do kolejki');
 
         return redirect()->back();
     }

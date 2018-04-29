@@ -17,6 +17,9 @@ class Log extends Model
     const TYPE_CREATED = 30;
     const TYPE_DELETED = 31;
     const TYPE_EDITED = 40;
+    const TYPE_SCHEDULED_CREATED = 45;
+    const TYPE_SCHEDULED_EDITED = 46;
+    const TYPE_SCHEDULED_DELETED = 47;
     const TYPE_SINGLE_CALL_VOTERS = 50;
     const TYPE_SINGLE_CALL_VOTERS_COMMENT = 51;
     const TYPE_SINGLE_CALL_COMMENTERS = 52;

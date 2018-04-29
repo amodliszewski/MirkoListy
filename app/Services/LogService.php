@@ -151,6 +151,18 @@ class LogService extends Base
                 return $this->templateService->getUserProfileUrl($log->user)
                     . ' zawołał aktywnych w <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_entry . '">tego znaleziska</a>';
 
+            case Log::TYPE_SCHEDULED_CREATED:
+                return $this->templateService->getUserProfileUrl($log->user)
+                    . ' zaplanował wpis';
+
+            case Log::TYPE_SCHEDULED_EDITED:
+                return $this->templateService->getUserProfileUrl($log->user)
+                    . ' edytował zaplanowany wpis';
+
+            case Log::TYPE_SCHEDULED_DELETED:
+                return $this->templateService->getUserProfileUrl($log->user)
+                    . ' usunął zaplanowany wpis';
+
             default:
                 return 'nieznane wydarzenie';
         }
@@ -301,6 +313,18 @@ class LogService extends Base
                 return $this->templateService->getUserProfileUrl($log->user)
                     . ' zawołała aktywnych w <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_entry . '">tego znaleziska</a>';
 
+            case Log::TYPE_SCHEDULED_CREATED:
+                return $this->templateService->getUserProfileUrl($log->user)
+                    . ' zaplanowała wpis';
+
+            case Log::TYPE_SCHEDULED_EDITED:
+                return $this->templateService->getUserProfileUrl($log->user)
+                    . ' edytowała zaplanowany wpis';
+
+            case Log::TYPE_SCHEDULED_DELETED:
+                return $this->templateService->getUserProfileUrl($log->user)
+                    . ' usunęła zaplanowany wpis';
+
             default:
                 return 'nieznane wydarzenie';
         }
@@ -449,6 +473,18 @@ class LogService extends Base
             case Log::TYPE_SINGLE_LINK_CALL_LINK_ALL:
                 return $this->templateService->getUserProfileUrl($log->user)
                     . ' zawołał(a) aktywnych w <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_source_entry . '">tym znalezisku</a> do <a rel="nofollow" href="' . $_ENV['WYKOP_BASE_URL'] . 'link/' . $log->single_entry . '">tego znaleziska</a>';
+
+            case Log::TYPE_SCHEDULED_CREATED:
+                return $this->templateService->getUserProfileUrl($log->user)
+                    . ' zaplanował(a) wpis';
+
+            case Log::TYPE_SCHEDULED_EDITED:
+                return $this->templateService->getUserProfileUrl($log->user)
+                    . ' edytował(a) zaplanowany wpis';
+
+            case Log::TYPE_SCHEDULED_DELETED:
+                return $this->templateService->getUserProfileUrl($log->user)
+                    . ' usunął/usunęła zaplanowany wpis';
 
             default:
                 return 'nieznane wydarzenie';

@@ -6,6 +6,7 @@ use Validator;
 use WykoCommon\Services\UserService;
 use App\Models\ScheduledPost;
 use App\Models\User;
+use App\Models\Log;
 
 class ScheduledController extends Controller
 {
@@ -71,6 +72,14 @@ class ScheduledController extends Controller
 
         $entity->save();
 
+        $log = new Log();
+
+        $log->user_id = $user->id;
+        $log->type = Log::TYPE_SCHEDULED_EDITED;
+        $log->scheduled_is = $entity->id;
+
+        $log->save();
+
         $request->session()->flash('flashSuccess', 'Zmiany zapisane');
 
         return redirect()->route('getScheduledItemsUrl');
@@ -106,6 +115,14 @@ class ScheduledController extends Controller
 
         $item->save();
 
+        $log = new Log();
+
+        $log->user_id = $user->id;
+        $log->type = Log::TYPE_SCHEDULED_CREATED;
+        $log->scheduled_is = $item->id;
+
+        $log->save();
+
         $request->session()->flash('flashSuccess', 'Wpis zaplanowany');
 
         return redirect()->route('getScheduledItemsUrl');
@@ -140,6 +157,14 @@ class ScheduledController extends Controller
                 && $user->rights != 99) {
             return response(view('errors/404'), 404);
         }
+
+        $log = new Log();
+
+        $log->user_id = $user->id;
+        $log->type = Log::TYPE_SCHEDULED_DELETED;
+        $log->scheduled_is = $entity->id;
+
+        $log->save();
 
         $entity->delete();
 
