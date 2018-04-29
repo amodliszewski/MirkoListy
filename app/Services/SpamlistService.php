@@ -10,25 +10,21 @@ use App\Models\Log;
 use App\Models\UserSpamlist;
 use App\Services\CallService;
 use WykoCommon\Services\WykopService;
-use App\Services\SpamlistService;
 
 class SpamlistService
 {
     private $request = null;
     private $callService;
     private $wykopService;
-    private $spamlistService;
 
     public function __construct(
         Request $request,
         CallService $callService,
-        WykopService $wykopService,
-        SpamlistService $spamlistService
+        WykopService $wykopService
     ) {
         $this->request = $request;
         $this->callService = $callService;
         $this->wykopService = $wykopService;
-        $this->spamlistService = $spamlistService;
     }
 
     public function call($user, $entryUrl, $selectedSex, $spamlists) {
@@ -81,7 +77,7 @@ class SpamlistService
                 return false;
             }
 
-            if (!$this->spamlistService->checkRights($entity, $user, UserSpamlist::ACTION_CALL)) {
+            if (!$this->checkRights($entity, $user, UserSpamlist::ACTION_CALL)) {
                 $this->request->session()->flash('flashError', 'Nie masz odpowiednich uprawnień do listy wołania listy ' . $entity->name);
 
                 return false;
