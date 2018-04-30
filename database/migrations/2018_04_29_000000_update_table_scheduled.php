@@ -15,6 +15,7 @@ class UpdateTableScheduled extends Migration
         Schema::table('scheduled_posts', function (Blueprint $table) {
             $table->string('spamlists');
             $table->smallInteger('spamlist_sex')->default(0);
+            $table->integer('user_call_limit')->unsigned();
             $table->softDeletes();
             $table->integer('deleted_by')->unsigned()->nullable();
 

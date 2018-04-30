@@ -298,7 +298,8 @@ class SpamlistController extends Controller
 
     public function call(Request $request,
             UserService $userService,
-            SpamlistService $spamlistService) {
+            SpamlistService $spamlistService,
+            CallService $callService) {
         if (isset($_ENV['IS_OFFLINE']) && $_ENV['IS_OFFLINE'] == 1) {
             return redirect(route('offline'));
         }
@@ -363,7 +364,10 @@ class SpamlistController extends Controller
             return redirect()->back()->withInput();
         }
 
-        if (!$spamlistService->call($user, $request->get('entryUrl'), (int) $this->request->get('sex'), $this->request->get('spamlists'))) {
+        $result = $spamlistService->call($user, $request->get('entryUrl'), (int) $this->request->get('sex'), $this->request->get('spamlists'), $callService->getGroupPerComment($this->request->session()->get('wykopGroup')));
+        if ($result !== true) {
+            $this->request->session()->flash('flashError', $result);
+
             return redirect()->back()->withInput();
         }
 
