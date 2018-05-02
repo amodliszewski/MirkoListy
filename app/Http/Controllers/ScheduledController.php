@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use WykoCommon\Services\UserService;
+use App\Services\CallService;
 use App\Models\ScheduledPost;
 use App\Models\User;
 use App\Models\Log;
@@ -56,7 +57,9 @@ class ScheduledController extends Controller
         $validator = Validator::make($request->all(), [
             'embed' => 'url',
             'content' => 'required|max:9999',
-            'post_at' => 'required|date|after:now'
+            'post_at' => 'required|date|after:now',
+            'spamlists.*' => 'regex:/[0-9A-Za-z]+/',
+            'spamlistSex' => 'required|in:0,1,2'
         ]);
 
         if ($validator->fails()) {
@@ -69,6 +72,8 @@ class ScheduledController extends Controller
         $entity->embed = $request->get('embed');
         $entity->content = $request->get('content');
         $entity->post_at = $request->get('post_at');
+        $entity->spamlists = empty($request->get('spamlists')) ? '' : implode(',', $request->get('spamlists'));
+        $entity->spamlist_sex = $request->get('spamlistSex');
 
         $entity->save();
 
@@ -76,7 +81,7 @@ class ScheduledController extends Controller
 
         $log->user_id = $user->id;
         $log->type = Log::TYPE_SCHEDULED_EDITED;
-        $log->scheduled_is = $entity->id;
+        $log->scheduled_post_id = $entity->id;
 
         $log->save();
 
@@ -85,7 +90,17 @@ class ScheduledController extends Controller
         return redirect()->route('getScheduledItemsUrl');
     }
 
-    public function add(Request $request, UserService $userService) {
+    public function addForm(UserService $userService) {
+        $user = $userService->getCurrentUser();
+
+        if ($user === null || $user->rights < User::RIGHTS_EXTENDED) {
+            return response(view('errors/404'), 404);
+        }
+
+        return view('scheduled/add');
+    }
+
+    public function add(Request $request, UserService $userService, CallService $callService) {
         $user = $userService->getCurrentUser();
 
         if ($user === null || $user->rights < User::RIGHTS_EXTENDED) {
@@ -95,7 +110,9 @@ class ScheduledController extends Controller
         $validator = Validator::make($request->all(), [
             'embed' => 'url',
             'content' => 'required|max:9999',
-            'post_at' => 'required|date|after:now'
+            'post_at' => 'required|date|after:now',
+            'spamlists.*' => 'regex:/[0-9A-Za-z]+/',
+            'spamlistSex' => 'required|in:0,1,2'
         ]);
 
         if ($validator->fails()) {
@@ -112,6 +129,9 @@ class ScheduledController extends Controller
         $item->content = $request->get('content');
         $item->post_at = $request->get('post_at');
         $item->user_key = $request->session()->get('wykopUserKey');
+        $item->spamlists = empty($request->get('spamlists')) ? '' : implode(',', $request->get('spamlists'));
+        $item->spamlist_sex = $request->get('spamlistSex');
+        $item->user_call_limit = $callService->getGroupPerComment($request->session()->get('wykopGroup'));
 
         $item->save();
 
@@ -119,7 +139,7 @@ class ScheduledController extends Controller
 
         $log->user_id = $user->id;
         $log->type = Log::TYPE_SCHEDULED_CREATED;
-        $log->scheduled_is = $item->id;
+        $log->scheduled_post_id = $item->id;
 
         $log->save();
 
@@ -162,9 +182,12 @@ class ScheduledController extends Controller
 
         $log->user_id = $user->id;
         $log->type = Log::TYPE_SCHEDULED_DELETED;
-        $log->scheduled_is = $entity->id;
+        $log->scheduled_post_id = $entity->id;
 
         $log->save();
+
+        $entity->deleted_by = $user->id;
+        $entity->save();
 
         $entity->delete();
 

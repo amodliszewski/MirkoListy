@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Spamlist;
@@ -13,56 +12,45 @@ use WykoCommon\Services\WykopService;
 
 class SpamlistService
 {
-    private $request = null;
     private $callService;
     private $wykopService;
 
     public function __construct(
-        Request $request,
         CallService $callService,
         WykopService $wykopService
     ) {
-        $this->request = $request;
         $this->callService = $callService;
         $this->wykopService = $wykopService;
     }
 
-    public function call($user, $entryUrl, $selectedSex, $spamlists) {
-        $perComment = $this->callService->getGroupPerComment($this->request->session()->get('wykopGroup'));
-
+    public function call($user, $entryUrl, $selectedSex, $spamlists, $perComment, $checkLog = true, $userKey = null) {
         if ($perComment === 0) {
-            $this->request->session()->flash('flashError', 'Twoje konto nie ma uprawnień do wołania.');
-
-            return false;
+            return 'Twoje konto nie ma uprawnień do wołania.';
         }
 
         $entryId = $this->wykopService->getEntryId($entryUrl);
         
         if ($entryId === null) {
-            $this->request->session()->flash('flashError', 'Niepoprawny adres wpisu');
-
-            return false;
+            return 'Niepoprawny adres wpisu';
         }
 
         $entryData = $this->wykopService->getEntryData($entryId);
 
         if ($entryData === null) {
-            $this->request->session()->flash('flashError', 'Nie udało się pobrać danych wpisu');
-
-            return false;
+            return 'Nie udało się pobrać danych wpisu';
         }
 
-        if (Cache::has('call_lock_' . $user->id)) {
-            $latestCallDate = new \DateTime(Cache::get('call_lock_' . $user->id));
+		if ($checkLog) {
+			if (Cache::has('call_lock_' . $user->id)) {
+				$latestCallDate = new \DateTime(Cache::get('call_lock_' . $user->id));
 
-            $this->request->session()->flash('flashError', 'Musisz poczekać <span class="countdownTimer">' . $latestCallDate->format('Y-m-d H:i:s') . '</span> min zanim zawołasz ponownie.');
+				return 'Musisz poczekać <span class="countdownTimer">' . $latestCallDate->format('Y-m-d H:i:s') . '</span> min zanim zawołasz ponownie.';
+			}
 
-            return false;
-        }
+			$callDate = new \DateTime('+' . $_ENV['CALLS_DELAY_MINUTES'] . ' minutes');
 
-        $callDate = new \DateTime('+' . $_ENV['CALLS_DELAY_MINUTES'] . ' minutes');
-
-        Cache::put('call_lock_' . $user->id, $callDate->format('Y-m-d H:i:s'), $_ENV['CALLS_DELAY_MINUTES']);
+			Cache::put('call_lock_' . $user->id, $callDate->format('Y-m-d H:i:s'), $_ENV['CALLS_DELAY_MINUTES']);
+		}
 
         $entities = array();
         $users = array();
@@ -72,15 +60,11 @@ class SpamlistService
             $entity = Spamlist::where('uid', '=', $spamlist)->first();
 
             if ($entity === null) {
-                $this->request->session()->flash('flashError', 'Lista ' . $spamlist . ' nie istnieje');
-
-                return false;
+                return 'Lista ' . $spamlist . ' nie istnieje';
             }
 
             if (!$this->checkRights($entity, $user, UserSpamlist::ACTION_CALL)) {
-                $this->request->session()->flash('flashError', 'Nie masz odpowiednich uprawnień do listy wołania listy ' . $entity->name);
-
-                return false;
+                return 'Nie masz odpowiednich uprawnień do listy wołania listy ' . $entity->name;
             }
 
             $pivotEntities = UserSpamlist::where('spamlist_id', '=', $entity['id'])
@@ -151,7 +135,7 @@ class SpamlistService
 
         $user->save();
 
-        $this->callService->call($entities, $entryId, null, $users, $perComment);
+        $this->callService->call($entities, $entryId, null, $users, $perComment, $user->id, $userKey);
 
         return true;
     }

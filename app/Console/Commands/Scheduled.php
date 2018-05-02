@@ -3,6 +3,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use WykoCommon\Services\WykopAPI;
+use App\Services\SpamlistService;
 use App\Models\ScheduledPost;
 
 class Scheduled extends Command
@@ -27,15 +28,18 @@ class Scheduled extends Command
      */
     private $wykopAPI = null;
 
+    private $spamlistService;
+
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(WykopAPI $wykopAPI) {
+    public function __construct(WykopAPI $wykopAPI, SpamlistService $spamlistService) {
         parent::__construct();
 
         $this->wykopAPI = $wykopAPI;
+        $this->spamlistService = $spamlistService;
     }
 
     /**
@@ -50,6 +54,8 @@ class Scheduled extends Command
         if ($item === null) {
             return;
         }
+
+        $baseUrl = !empty($_ENV['WYKOP_BASE_URL']) ? $_ENV['WYKOP_BASE_URL'] : getenv('WYKOP_BASE_URL');
 
         while (true) {
             if ($item->post_at->timestamp <= time()) {
@@ -71,7 +77,18 @@ class Scheduled extends Command
                 ));
             }
 
+			$userKey = $item->user_key;
+
+            $item->user_key = '--';
+            $item->save();
+
             $item->delete();
+
+            $callResult = $this->spamlistService->call($item->user, $baseUrl . 'wpis/' . $result['id'], (int) $item->spamlist_sex, explode(',', $item->spamlists), $item->user_call_limit, false, $userKey);
+
+            if ($callResult !== true) {
+                user_error($callResult, E_USER_WARNING);
+            }
 
             $this->info("\n\nPosted");
         } else {

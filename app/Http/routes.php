@@ -140,9 +140,7 @@ Route::get('/scheduled', array(
 ));
 
 Route::get('/scheduled/add', array(
-    function() {
-        return view('scheduled/add');
-    },
+    'uses' => 'ScheduledController@addForm',
     'as' => 'addScheduledUrl'
 ));
 

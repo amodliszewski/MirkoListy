@@ -31,7 +31,9 @@
 ?>
                     <div class="control-group form-group">
                         <div class="controls">
-                            <label>Zawołaj listy:</label>
+                            <div>
+                                <label>Zawołaj listy:</label>
+                            </div>
 <?php
         if (count($callableSpamlists) > 0) {
             foreach ($callableSpamlists as $loopItem) {
@@ -47,6 +49,13 @@
         }
 ?>
                         </div>
+                    </div>
+                    <div class="control-group form-group">
+                        <select name="spamlistSex" class="form-control" style="width: 100%">
+                            <option value="0">zawołaj wszystkich</option>
+                            <option value="1">zawołaj tylko niebieskie paski</option>
+                            <option value="2">zawołaj tylko różowe paski</option>
+                        </select>
                     </div>
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>" />
 
