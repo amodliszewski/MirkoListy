@@ -57,7 +57,7 @@ class CallService extends Base
         $this->singleCall($entryId, $linkId, $firstCommentPrefix, $users, $perComment);
     }
 
-    public function singleCall($entryId, $linkId, $firstCommentPrefix, $users, $perComment) {
+    public function singleCall($entryId, $linkId, $firstCommentPrefix, $users, $perComment, $userId = null, $userKey = null) {
         $users = array_unique($users);
 
         $optOutUsers = User::whereIn('nick', $users)->where('call_optout', 1)->get();
@@ -76,6 +76,9 @@ class CallService extends Base
             return;
         }
 
+		$prefix = !empty($_ENV['WYKOP_CALL_PREFIX']) ? $_ENV['WYKOP_CALL_PREFIX'] : getenv('WYKOP_CALL_PREFIX');
+		$baseUrl = !empty($_ENV['WYKOP_BASE_URL']) ? $_ENV['WYKOP_BASE_URL'] : getenv('WYKOP_BASE_URL');
+
         $preparedUsers = [];
 
         foreach ($users as $user) {
@@ -83,18 +86,18 @@ class CallService extends Base
                 continue;
             }
 
-            $preparedUsers[] = $_ENV['WYKOP_CALL_PREFIX'] . $user;
+            $preparedUsers[] = $prefix . $user;
         }
 
         $firstCommentPrefix .= ' (' . count($preparedUsers) . ")\n\n";
         $firstCommentPrefix .= "Dodatek wspierany przez [**Cebula.Online**](https://cebula.online/?utm_source=social&utm_medium=wykop&utm_campaign=mirkolisty)\n\n";
-        $firstCommentPrefix .= "Nie chcesz być wołany/a jako plusujący/a? Włącz blokadę na https://mirkolisty.pvu.pl/call lub odezwij się do @[IrvinTalvanen](" . $_ENV['WYKOP_BASE_URL'] . "IrvinTalvanen/)";
-        $firstCommentPrefix .= "\n\nUważasz, że wołający nadużywa MirkoList? Daj znać @[IrvinTalvanen](" . $_ENV['WYKOP_BASE_URL'] . "ludzie/IrvinTalvanen/)\n\n";
+        $firstCommentPrefix .= "Nie chcesz być wołany/a jako plusujący/a? Włącz blokadę na https://mirkolisty.pvu.pl/call lub odezwij się do @[IrvinTalvanen](" . $baseUrl . "IrvinTalvanen/)";
+        $firstCommentPrefix .= "\n\nUważasz, że wołający nadużywa MirkoList? Daj znać @[IrvinTalvanen](" . $baseUrl . "ludzie/IrvinTalvanen/)\n\n";
 
-        $this->saveQueue($firstCommentPrefix, $preparedUsers, $entryId, $linkId, $perComment);
+        $this->saveQueue($firstCommentPrefix, $preparedUsers, $entryId, $linkId, $perComment, $userId, $userKey);
     }
 
-    protected function queueComments($spamlists, $entryId, $linkId, $users, $perComment) {
+    protected function queueComments($spamlists, $entryId, $linkId, $users, $perComment, $userId = null, $userKey = null) {
         $spamlistsNames = array();
         foreach ($spamlists as $spamlist) {
             $spamlistsNames[] = '[' . str_replace('#', '', $spamlist->name) . '](https://mirkolisty.pvu.pl/list/' . $spamlist->uid . ')';
@@ -107,20 +110,23 @@ class CallService extends Base
             $firstCommentPrefix .= 'list ';
         }
 
+		$prefix = !empty($_ENV['WYKOP_CALL_PREFIX']) ? $_ENV['WYKOP_CALL_PREFIX'] : getenv('WYKOP_CALL_PREFIX');
+		$baseUrl = !empty($_ENV['WYKOP_BASE_URL']) ? $_ENV['WYKOP_BASE_URL'] : getenv('WYKOP_BASE_URL');
+
         $firstCommentPrefix .= implode(', ', $spamlistsNames) . "\n";
 
         $firstCommentPrefix .= "**Możesz zapisać/wypisać się klikając na nazwę listy.**\n\n";
         $firstCommentPrefix .= "Dodatek wspierany przez [**Cebula.Online**](https://cebula.online/?utm_source=social&utm_medium=wykop&utm_campaign=mirkolisty)\n\n";
-        $firstCommentPrefix .= "Masz problem z działaniem listy? A może pytanie? Pisz do [IrvinTalvanen](" . $_ENV['WYKOP_BASE_URL'] . "ludzie/IrvinTalvanen/)\n\n";
+        $firstCommentPrefix .= "Masz problem z działaniem listy? A może pytanie? Pisz do [IrvinTalvanen](" . $baseUrl . "ludzie/IrvinTalvanen/)\n\n";
 
         $prepared = array();
 
         foreach ($users as $user) {
-            $prepared[] = $_ENV['WYKOP_CALL_PREFIX'] . $user;
+            $prepared[] = $prefix . $user;
         }
 
         if (count($prepared) > 0) {
-            $this->saveQueue($firstCommentPrefix, $prepared, $entryId, $linkId, $perComment);
+            $this->saveQueue($firstCommentPrefix, $prepared, $entryId, $linkId, $perComment, $userId, $userKey);
         }
     }
 

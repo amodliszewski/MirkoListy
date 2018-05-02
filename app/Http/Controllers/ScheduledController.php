@@ -90,6 +90,16 @@ class ScheduledController extends Controller
         return redirect()->route('getScheduledItemsUrl');
     }
 
+    public function addForm(UserService $userService) {
+        $user = $userService->getCurrentUser();
+
+        if ($user === null || $user->rights < User::RIGHTS_EXTENDED) {
+            return response(view('errors/404'), 404);
+        }
+
+        return view('scheduled/add');
+    }
+
     public function add(Request $request, UserService $userService, CallService $callService) {
         $user = $userService->getCurrentUser();
 

@@ -1,7 +1,6 @@
 <?php
 namespace App\Services;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Spamlist;
@@ -13,21 +12,18 @@ use WykoCommon\Services\WykopService;
 
 class SpamlistService
 {
-    private $request = null;
     private $callService;
     private $wykopService;
 
     public function __construct(
-        Request $request,
         CallService $callService,
         WykopService $wykopService
     ) {
-        $this->request = $request;
         $this->callService = $callService;
         $this->wykopService = $wykopService;
     }
 
-    public function call($user, $entryUrl, $selectedSex, $spamlists, $perComment) {
+    public function call($user, $entryUrl, $selectedSex, $spamlists, $perComment, $checkLog = true, $userKey = null) {
         if ($perComment === 0) {
             return 'Twoje konto nie ma uprawnień do wołania.';
         }
@@ -44,15 +40,17 @@ class SpamlistService
             return 'Nie udało się pobrać danych wpisu';
         }
 
-        if (Cache::has('call_lock_' . $user->id)) {
-            $latestCallDate = new \DateTime(Cache::get('call_lock_' . $user->id));
+		if ($checkLog) {
+			if (Cache::has('call_lock_' . $user->id)) {
+				$latestCallDate = new \DateTime(Cache::get('call_lock_' . $user->id));
 
-            return 'Musisz poczekać <span class="countdownTimer">' . $latestCallDate->format('Y-m-d H:i:s') . '</span> min zanim zawołasz ponownie.';
-        }
+				return 'Musisz poczekać <span class="countdownTimer">' . $latestCallDate->format('Y-m-d H:i:s') . '</span> min zanim zawołasz ponownie.';
+			}
 
-        $callDate = new \DateTime('+' . $_ENV['CALLS_DELAY_MINUTES'] . ' minutes');
+			$callDate = new \DateTime('+' . $_ENV['CALLS_DELAY_MINUTES'] . ' minutes');
 
-        Cache::put('call_lock_' . $user->id, $callDate->format('Y-m-d H:i:s'), $_ENV['CALLS_DELAY_MINUTES']);
+			Cache::put('call_lock_' . $user->id, $callDate->format('Y-m-d H:i:s'), $_ENV['CALLS_DELAY_MINUTES']);
+		}
 
         $entities = array();
         $users = array();
@@ -137,7 +135,7 @@ class SpamlistService
 
         $user->save();
 
-        $this->callService->call($entities, $entryId, null, $users, $perComment);
+        $this->callService->call($entities, $entryId, null, $users, $perComment, $user->id, $userKey);
 
         return true;
     }

@@ -77,12 +77,14 @@ class Scheduled extends Command
                 ));
             }
 
+			$userKey = $item->user_key;
+
             $item->user_key = '--';
             $item->save();
 
             $item->delete();
 
-            $callResult = $this->spamlistService->call($item->user, $baseUrl . 'wpis/' . $result['id'], (int) $item->spamlist_sex, explode(',', $item->spamlists), $item->user_call_limit);
+            $callResult = $this->spamlistService->call($item->user, $baseUrl . 'wpis/' . $result['id'], (int) $item->spamlist_sex, explode(',', $item->spamlists), $item->user_call_limit, false, $userKey);
 
             if ($callResult !== true) {
                 user_error($callResult, E_USER_WARNING);
