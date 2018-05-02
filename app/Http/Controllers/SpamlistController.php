@@ -364,7 +364,7 @@ class SpamlistController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $result = $spamlistService->call($user, $request->get('entryUrl'), (int) $this->request->get('sex'), $this->request->get('spamlists'), $callService->getGroupPerComment($this->request->session()->get('wykopGroup')));
+        $result = $spamlistService->call($user, $request->get('entryUrl'), (int) $request->get('sex'), $request->get('spamlists'), $callService->getGroupPerComment($request->session()->get('wykopGroup')));
         if ($result !== true) {
             $this->request->session()->flash('flashError', $result);
 
