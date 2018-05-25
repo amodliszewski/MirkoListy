@@ -12,7 +12,7 @@
 				<ul>
 					<li><p><strong>Serwis</strong> - serwis internetowy działający pod adresem <span id="serwis"><span class="colored">https://mirkolisty.pvu.pl</span></span></p></li>
 					<li><p><strong>Serwis Zewnętrzny</strong> - serwis internetowy partnera, usługodawcy lub usługobiorcy Administratora</p></li>
-					<li><p><strong>Administrator</strong> - firma <span id="firma"><span class="colored">ProperSoft.pl Woliński Piotr</span>, prowadząca działalność pod adresem: <span class="colored">Szafarnia 11/F8</span>, o nadanym numerze identyfikacji podatkowej (NIP): <span class="colored">7431920921</span></span>, świadcząca usługi drogą elektroniczną za pośrednictwem Serwisu oraz przechowująca i uzyskująca dostęp do informacji w urządzeniach Użytkownika</p></li>
+					<li><p><strong>Administrator</strong> - firma <span id="firma"><span class="colored">ProperSoft.pl Woliński Piotr</span>, prowadząca działalność pod adresem: <span class="colored">Szafarnia 11/F8</span>, o nadanym numerze identyfikacji podatkowej (NIP): <span class="colored">7431920921</span>, email <span class="colored">biuro@propersoft.pl</span>, świadcząca usługi drogą elektroniczną za pośrednictwem Serwisu oraz przechowująca i uzyskująca dostęp do informacji w urządzeniach Użytkownika</p></li>
 					<li><p><strong>Użytkownik</strong> - osba fizyczna, dla której Administrator świadczy usługi drogą elektroniczna za pośrednictwem Serwisu.</p></li>
 					<li><p><strong>Urządzenie</strong> - elektroniczne urządzenie wraz z oprogramowaniem, za pośrednictwem, którego Użytkownik uzyskuje dostęp do Serwisu</p></li>
 					<li><p><strong>Cookies (ciasteczka)</strong> - dane tekstowe gromadzone w formie plików zamieszczanych na Urządzeniu Użytkownika</p></li>
