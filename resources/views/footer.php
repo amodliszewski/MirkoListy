@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <p>
-                            Copyright &copy; mirkolisty.pvu.pl 2015-<?php echo date('Y'); ?> | Administrator: <a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>ludzie/IrvinTalvanen" rel="nofollow">IrvinTalvanen</a>
+                            Copyright &copy; mirkolisty.pvu.pl 2015-<?php echo date('Y'); ?> | Administrator: <a href="<?php echo $_ENV['WYKOP_BASE_URL']; ?>ludzie/IrvinTalvanen" rel="nofollow">IrvinTalvanen</a> | <a href="<?php echo route('privacyUrl'); ?>">Polityka Prywatności</a>
 <?php
     if (@$_ENV['APP_ENV'] !== 'production') {
         echo ' | devel';

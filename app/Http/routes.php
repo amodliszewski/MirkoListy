@@ -58,6 +58,13 @@ Route::get('/faq', array(
     },
     'as' => 'faqUrl'
 ));
+
+Route::get('/privacy', array(
+    function() {
+        return view('default/privacy');
+    },
+    'as' => 'privacyUrl'
+));
     
 // lists
 Route::get('/lists', array(
