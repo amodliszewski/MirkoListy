@@ -90,7 +90,6 @@ class CallService extends Base
         }
 
         $firstCommentPrefix .= ' (' . count($preparedUsers) . ")\n\n";
-        $firstCommentPrefix .= "Dodatek wspierany przez [**Cebula.Online**](https://cebula.online/?utm_source=social&utm_medium=wykop&utm_campaign=mirkolisty)\n\n";
         $firstCommentPrefix .= "Nie chcesz być wołany/a jako plusujący/a? Włącz blokadę na https://mirkolisty.pvu.pl/call lub odezwij się do @[IrvinTalvanen](" . $baseUrl . "IrvinTalvanen/)";
         $firstCommentPrefix .= "\n\nUważasz, że wołający nadużywa MirkoList? Daj znać @[IrvinTalvanen](" . $baseUrl . "ludzie/IrvinTalvanen/)\n\n";
 
@@ -116,7 +115,6 @@ class CallService extends Base
         $firstCommentPrefix .= implode(', ', $spamlistsNames) . "\n";
 
         $firstCommentPrefix .= "**Możesz zapisać/wypisać się klikając na nazwę listy.**\n\n";
-        $firstCommentPrefix .= "Dodatek wspierany przez [**Cebula.Online**](https://cebula.online/?utm_source=social&utm_medium=wykop&utm_campaign=mirkolisty)\n\n";
         $firstCommentPrefix .= "Masz problem z działaniem listy? A może pytanie? Pisz do [IrvinTalvanen](" . $baseUrl . "ludzie/IrvinTalvanen/)\n\n";
 
         $prepared = array();
