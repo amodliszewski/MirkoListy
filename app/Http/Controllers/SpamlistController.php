@@ -652,6 +652,12 @@ class SpamlistController extends Controller
             return response(view('errors/404'), 404);
         }
 
+		if ($entity->category() !== null && $entity->category()->limited) {
+            $request->session()->flash('flashError', 'Usuwanie użytkowników z list z kategorii ' . $entity->category()->name . ' zostało zablokowane');
+
+            return redirect()->back();
+		}
+
         $editedUserId = (int) $request->get('userId');
 
         $pivot = UserSpamlist::where('user_id', '=', $editedUserId)
