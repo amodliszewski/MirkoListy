@@ -652,6 +652,7 @@ class SpamlistController extends Controller
             return response(view('errors/404'), 404);
         }
 
+        $newRights = (int) $request->get('rights');
 		if ($newRights === -1 && $entity->category !== null && $entity->category->limited) {
             $request->session()->flash('flashError', 'Usuwanie użytkowników z list z kategorii ' . $entity->category->name . ' zostało zablokowane');
 
@@ -670,7 +671,6 @@ class SpamlistController extends Controller
             return redirect()->back();
         }
 
-        $newRights = (int) $request->get('rights');
         $changeCount = 0;
 
         if ($newRights === -1) {
