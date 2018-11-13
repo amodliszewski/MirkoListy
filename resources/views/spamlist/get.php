@@ -105,7 +105,7 @@
 ?>
                         <div class="input-group" style="padding-top: 15px">
                             <div>
-                                <button class="btn btn-default" disabled="disabled" type="submit">zaloguj się jeśli chcesz dołączyć</button>
+                                <button class="btn btn-default" onclick="document.location='<?php echo $app->make('WykoCommon\Services\WykopService')->getLoginUrl(true); ?>'; return false;" type="submit">zaloguj się jeśli chcesz dołączyć</button>
                             </div>
                         </div>
 <?php
