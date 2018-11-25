@@ -2,9 +2,18 @@
 namespace App\Services;
 
 use WykoCommon\Services\TemplateService as Base;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use App\Models\Spamlist;
 
 class TemplateService extends Base
 {
+    private $request;
+
+    public function __construct(Request $request) {
+        $this->request = $request;
+    }
+
     public function getSexClass($sex) {
         switch ($sex) {
             case 1:
@@ -35,5 +44,26 @@ class TemplateService extends Base
                 </div>
             </div>
 <?php
+    }
+
+    public function generateStatisticsTags() {
+        if (
+            Route::currentRouteNamed('getSpamlistPeopleUrl')
+            || Route::currentRouteNamed('getSpamlistUrl')
+        ) {
+            $entity = Spamlist::withTrashed()
+                ->where('uid', '=', $this->request->route('uid'))
+                ->first();
+
+            if ($entity === null || $entity->trashed()) {
+                return;
+            }
+?>
+        gtag('set', {
+            'author': '<?php echo $entity->user_id; ?>',
+            'article': '<?php echo $entity->uid; ?>'
+        });
+<?php
+        }
     }
 }

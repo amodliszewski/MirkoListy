@@ -20,6 +20,30 @@
 <?php
     }
 ?>
+        <!-- Google Tag Manager -->
+        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+        })(window,document,'script','dataLayer','GTM-5GVSMZQ');</script>
+        <!-- End Google Tag Manager -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69280701-1"></script>
+        <script>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+<?php
+$app->make('App\Services\TemplateService')->generateStatisticsTags();
+?>
+          gtag('config', 'UA-69280701-1', {
+              anonymize_ip: true,
+              custom_map: {
+                  dimension1: 'author',
+                  dimension2: 'article'
+              }
+          });
+        </script>
 
         <script type="text/javascript" src="/js/jquery.js?v=<?php echo $assetsVersion; ?>"></script>
         <script type="text/javascript" src="/js/bootstrap.min.js?v=<?php echo $assetsVersion; ?>"></script>
@@ -43,6 +67,10 @@
         </script>
     </head>
     <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5GVSMZQ"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
         <div class="theme-changer change-style">
             <div>&nbsp;</div>
         </div>
