@@ -106,6 +106,10 @@ Route::post('/list/{uid}/call', array(
     ->where('uid', '[0-9A-Za-z]{16}')
     ->middleware(['auth', 'canAdd']);
 
+Route::post('/api/list/{uid}/call', 'SpamlistController@apiCall')
+    ->where('uid', '[0-9A-Za-z]{16}')
+    ->middleware(['internalApi']);
+
 Route::post('/list/{uid}/import', array(
     'uses' => 'SpamlistController@import',
     'as' => 'postSpamlistImportUrl'

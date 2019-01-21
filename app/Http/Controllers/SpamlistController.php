@@ -1,13 +1,17 @@
 <?php
 namespace App\Http\Controllers;
 
+use Closure;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Spamlist;
 use WykoCommon\Services\UserService;
+use App\Services\UserService as ApiUserService;
 use App\Services\CallService;
 use WykoCommon\Services\WykopService;
 use App\Services\SpamlistService;
@@ -296,6 +300,59 @@ class SpamlistController extends Controller
         ));
     }
 
+    /**
+     * Validates call data, returns true or whatever callback returns
+     * Callback accepts one argument that is array of errors
+     *
+     * @param array $data
+     * @param Closure $callback
+     * @return bool|mixed
+     */
+    protected function callValidation(array $data, User $user, Closure $callback)
+    {
+        $validator = Validator::make($data, [
+            'entryUrl' => 'required|URL',
+            'spamlists' => 'required|array',
+            'sex' => 'required|in:0,1,2'
+        ]);
+        if ($validator->fails()) {
+            return $callback($validator->errors()->all());
+        }
+
+        if (empty($data['spamlists'])) {
+
+            return $callback(['Musisz wybrać przynajmniej jedną listę']);
+        }
+
+        if (count($data['spamlists']) > 3) {
+            return $callback(['Możesz wołać maksymalnie 3 listy na raz']);
+        }
+
+        foreach($data['spamlists'] as $key => $value) {
+            $validator->mergeRules("spamlists.$key", 'required|regex:/[0-9A-Za-z]{16}/');
+        }
+
+        if ($validator->fails()) {
+            return $callback($validator->errors()->all());
+        }
+
+        if (Cache::has('call_lock_' . $user->id)) {
+            $latestCallDate = new \DateTime(Cache::get('call_lock_' . $user->id));
+
+            return $callback(['Musisz poczekać <span class="countdownTimer">' . $latestCallDate->format('Y-m-d H:i:s') . '</span> min zanim zawołasz ponownie.']);
+        }
+
+        $currentQueue = Queue::where('user_id', '=', $user->id)
+            ->whereNotNull('user_key')
+            ->first();
+
+        if ($currentQueue !== null) {
+            return $callback(['Twoje poprzednie wołanie jest nadal w trakcie. Musisz poczekać aż zostanie zakończone (może to potrwać do 15 minut).']);
+        }
+
+        return true;
+    }
+
     public function call(Request $request,
             UserService $userService,
             SpamlistService $spamlistService,
@@ -303,64 +360,19 @@ class SpamlistController extends Controller
         if (isset($_ENV['IS_OFFLINE']) && $_ENV['IS_OFFLINE'] == 1) {
             return redirect(route('offline'));
         }
-
-        $validator = Validator::make($request->all(), [
-            'entryUrl' => 'required|URL',
-            'spamlists' => 'required|array',
-            'sex' => 'required|in:0,1,2'
-        ]);
-
-        if ($validator->fails()) {
-            $messages = $validator->errors()->all();
-            $request->session()->flash('flashError', implode("<br />", $messages));
-
-            return redirect()->back()->withInput();
-        }
-
-        if (empty($request->get('spamlists'))) {
-            $request->session()->flash('flashError', 'Musisz wybrać przynajmniej jedną listę');
-
-            return redirect()->back()->withInput();
-        }
-
-        if (count($request->get('spamlists')) > 3) {
-            $request->session()->flash('flashError', 'Możesz wołać maksymalnie 3 listy na raz');
-
-            return redirect()->back()->withInput();
-        }
-
-        foreach($request->get('spamlists') as $key => $value) {
-            $validator->mergeRules("spamlists.$key", 'required|regex:/[0-9A-Za-z]{16}/');
-        }
-
-        if ($validator->fails()) {
-            $messages = $validator->errors()->all();
-            $request->session()->flash('flashError', implode("<br />", $messages));
-
-            return redirect()->back()->withInput();
-        }
-
+        //get user
         $user = $userService->getCurrentUser();
-
+        //on session out display 404
         if ($user === null) {
             return response(view('errors/404'), 404);
         }
 
-        if (Cache::has('call_lock_' . $user->id)) {
-            $latestCallDate = new \DateTime(Cache::get('call_lock_' . $user->id));
+        $valid = $this->callValidation($request->all(), $user, function ($errors) use ($request) {
+            $request->session()->flash('flashError', implode("<br />", $errors));
+            return false;
+        });
 
-            $request->session()->flash('flashError', 'Musisz poczekać <span class="countdownTimer">' . $latestCallDate->format('Y-m-d H:i:s') . '</span> min zanim zawołasz ponownie.');
-
-            return redirect()->back()->withInput();
-        }
-
-        $currentQueue = Queue::where('user_id', '=', $user->id)
-                ->whereNotNull('user_key')
-                ->first();
-
-        if ($currentQueue !== null) {
-            $request->session()->flash('flashError', 'Twoje poprzednie wołanie jest nadal w trakcie. Musisz poczekać aż zostanie zakończone (może to potrwać do 15 minut).');
-
+        if ($valid !== true) {
             return redirect()->back()->withInput();
         }
 
@@ -372,6 +384,37 @@ class SpamlistController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function apiCall(
+        Request $request,
+        ApiUserService $userService,
+        SpamlistService $spamlistService,
+        CallService $callService
+    ) {
+        $user = $userService->getCurrentApiUser();
+        $requestBody = $request->json()->all();
+        $validationResult = $this->callValidation($requestBody, $user, function ($errors) use ($request) {
+            return new JsonResponse($errors, Response::HTTP_BAD_REQUEST);
+        });
+
+        if ($validationResult instanceof JsonResponse) {
+            return $validationResult;
+        }
+
+        $result = $spamlistService->call(
+            $user,
+            $requestBody['entryUrl'],
+            (int) $requestBody['sex'],
+            $requestBody['spamlists'],
+            $callService->getGroupPerComment($user->color)
+        );
+
+        if ($result !== true) {
+            return new JsonResponse($result, Response::HTTP_BAD_REQUEST);
+        }
+
+        return new JsonResponse('OK', Response::HTTP_OK);
     }
 
     public function join(Request $request, UserService $userService, $uid) {

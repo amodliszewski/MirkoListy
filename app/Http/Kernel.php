@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\InternalApiMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -48,6 +49,7 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \WykoCommon\Http\Middleware\AuthMiddleware::class,
         'canAdd' => \WykoCommon\Http\Middleware\CanAddMiddleware::class,
+        'internalApi' => InternalApiMiddleware::class,
         'notBanned' => \WykoCommon\Http\Middleware\NotBannedMiddleware::class,
         'gotExtendedRights' => \WykoCommon\Http\Middleware\GotExtendedRightsMiddleware::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
