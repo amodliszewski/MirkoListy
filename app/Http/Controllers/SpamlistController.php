@@ -353,10 +353,12 @@ class SpamlistController extends Controller
         return true;
     }
 
-    public function call(Request $request,
-            UserService $userService,
-            SpamlistService $spamlistService,
-            CallService $callService) {
+    public function call(
+        Request $request,
+        UserService $userService,
+        SpamlistService $spamlistService,
+        CallService $callService
+    ) {
         if (isset($_ENV['IS_OFFLINE']) && $_ENV['IS_OFFLINE'] == 1) {
             return redirect(route('offline'));
         }
@@ -392,6 +394,10 @@ class SpamlistController extends Controller
         SpamlistService $spamlistService,
         CallService $callService
     ) {
+        if (isset($_ENV['IS_OFFLINE']) && $_ENV['IS_OFFLINE'] == 1) {
+            return new JsonResponse('System is offline', Response::HTTP_SERVICE_UNAVAILABLE);
+        }
+
         $user = $userService->getCurrentApiUser();
         $requestBody = $request->json()->all();
         $validationResult = $this->callValidation($requestBody, $user, function ($errors) use ($request) {

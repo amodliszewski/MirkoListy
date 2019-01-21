@@ -2,8 +2,12 @@
 
 namespace App\Console;
 
+use App\Console\Commands\GenerateApiToken;
+use App\Console\Commands\RefreshSpamlistUsers;
+use App\Console\Commands\Scheduled;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use WykoCommon\Console\Commands\ProcessQueue;
 
 class Kernel extends ConsoleKernel
 {
@@ -13,9 +17,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\Scheduled',
-        'App\Console\Commands\RefreshSpamlistUsers',
-        'WykoCommon\Console\Commands\ProcessQueue'
+        Scheduled::class,
+        RefreshSpamlistUsers::class,
+        GenerateApiToken::class,
+        ProcessQueue::class
     ];
 
     /**
