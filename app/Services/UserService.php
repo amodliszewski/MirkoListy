@@ -32,7 +32,10 @@ class UserService extends CommonUserService
      */
     public function getCurrentApiUser()
     {
-        if (!$this->request->headers->has('X-Token')) {
+        if (
+            !$this->request->headers->has('X-Token') ||
+            !$this->request->headers->has('X-User-App-Key')
+        ) {
             return null;
         }
 

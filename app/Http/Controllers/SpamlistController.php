@@ -1,7 +1,9 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Services\ApiService;
 use Closure;
+use GuzzleHttp\Client;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -408,12 +410,26 @@ class SpamlistController extends Controller
             return $validationResult;
         }
 
+        $apiService = new ApiService(
+            getenv('WYKOP_API_KEY'),
+            getenv('WYKOP_API_SECRET'),
+            new Client()
+        );
+
+        $userSecret = $apiService->getUserSecret($user->nick, $request->headers->get('X-User-App-Key'));
+
+        if ($userSecret === false) {
+            return new JsonResponse('Klucz usera (X-User-App-Key) jest nieprawidłowy', Response::HTTP_BAD_REQUEST);
+        }
+
         $result = $spamlistService->call(
             $user,
             $requestBody['entryUrl'],
             (int) $requestBody['sex'],
             $requestBody['spamlists'],
-            $callService->getGroupPerComment($user->color)
+            $callService->getGroupPerComment($user->color),
+            true,
+            $userSecret
         );
 
         if ($result !== true) {
